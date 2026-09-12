@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio | DSA Media Crew</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/portfolio.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="site-nav">
+    <a href="home.html" class="nav-logo">
+      <span class="logo-red">DSA</span><span class="logo-dot">·</span><span class="logo-text">MEDIA CREW</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="team.html">Team</a></li>
+      <li><a href="videography-aftermovies.html">Videography</a></li>
+      <li><a href="editing-designs.html">Designs</a></li>
+      <li class="nav-item-dropdown">
+        <a class="nav-dropdown-toggle">Events <span class="dropdown-arrow">▼</span></a>
+        <ul class="dropdown-menu">
+          <li><a href="meraki26.html">Meraki '26</a></li>
+        </ul>
+      </li>
+      <li><a href="home.html#contact">Contact</a></li>
+    </ul>
+    <div class="nav-status-badge">
+      <span class="status-dot"></span>OFFICIAL CREW
+    </div>
+    <button class="nav-toggle" aria-label="Toggle Navigation Menu">
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+      <span class="nav-toggle-bar"></span>
+    </button>
+  </nav>
+
+  <!-- Portfolio Hero Section -->
+  <section class="portfolio-hero">
+    <div class="hero-banner" id="heroBanner"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="profile-image-container">
+        <img src="" alt="Profile" class="profile-image" id="profileImage">
+        <div class="profile-ring"></div>
+      </div>
+      <div class="profile-info">
+        <div class="profile-role" id="profileRole">ROLE</div>
+        <h1 class="profile-name" id="profileName">NAME</h1>
+        <p class="profile-tagline" id="profileTagline">Tagline</p>
+        <div class="profile-category" id="profileCategory">CATEGORY</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="portfolio-section about-section">
+    <div class="section-header">
+      <span class="section-label">ABOUT</span>
+      <h2 class="section-title">WHO I AM</h2>
+    </div>
+    <div class="about-content">
+      <p class="about-bio" id="aboutBio">Bio description here...</p>
+      <div class="about-specialty">
+        <span class="specialty-label">SPECIALTY</span>
+        <span class="specialty-value" id="aboutSpecialty">Specialty text</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="portfolio-section skills-section">
+    <div class="section-header">
+      <span class="section-label">SKILLS</span>
+      <h2 class="section-title">WHAT I DO</h2>
+    </div>
+    <div class="skills-grid" id="skillsGrid"></div>
+  </section>
+
+  <!-- Media DNA Section -->
+  <section class="portfolio-section media-dna-section">
+    <div class="section-header">
+      <span class="section-label">MEDIA DNA</span>
+      <h2 class="section-title">MY CREATIVE GENETICS</h2>
+    </div>
+    <div class="media-dna-container" id="mediaDNAContainer"></div>
+  </section>
+
+  <!-- Portfolio/Work Section -->
+  <section class="portfolio-section work-section">
+    <div class="section-header">
+      <span class="section-label">PORTFOLIO</span>
+      <h2 class="section-title">MY WORK</h2>
+    </div>
+    <div class="work-grid" id="workGrid"></div>
+  </section>
+
+  <!-- Credits Section -->
+  <section class="portfolio-section credits-section">
+    <div class="section-header">
+      <span class="section-label">CREDITS</span>
+      <h2 class="section-title">PROJECTS & EVENTS</h2>
+    </div>
+    <div class="credits-list" id="creditsList"></div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="portfolio-section contact-section">
+    <div class="section-header">
+      <span class="section-label">CONNECT</span>
+      <h2 class="section-title">GET IN TOUCH</h2>
+    </div>
+    <div class="social-links" id="socialLinks"></div>
+  </section>
+
+  <!-- Back to Team -->
+  <section class="back-section">
+    <a href="team.html" class="back-btn">
+      <span class="back-icon">←</span>
+      <span class="back-text">BACK TO TEAM</span>
+    </a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="portfolio-footer">
+    <div class="footer-content">
+      <p class="footer-text">© 2025 DSA Media Crew. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/team-data.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/performance.js"></script>
+  <script src="js/portfolio.js"></script>
+</body>
+</html>

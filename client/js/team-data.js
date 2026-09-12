@@ -1,0 +1,696 @@
+// DSA Media Crew Team Data Structure
+// Complete, Production-Ready Team Directory
+
+const teamData = {
+  categories: [
+    { id: 'all', name: 'ALL', signal: 'grid' },
+    { id: 'leader', name: 'LEADERSHIP', signal: 'crown' },
+    { id: 'photography', name: 'PHOTOGRAPHY', signal: 'frequency' },
+    { id: 'videography', name: 'VIDEOGRAPHY', signal: 'timeline' },
+    { id: 'design', name: 'DESIGN', signal: 'geometric' },
+    { id: 'editing', name: 'EDITING', signal: 'waveform' },
+    { id: 'content', name: 'CONTENT', signal: 'pulse' },
+    { id: 'tech', name: 'TECH', signal: 'network' },
+    { id: 'vlogging', name: 'VLOGGING', signal: 'pulse' },
+    { id: 'onscreen', name: 'ON SCREEN', signal: 'engagement' }
+  ],
+
+  leadership: {
+    president: {
+      id: 'president',
+      name: 'Prince Kumar',
+      role: 'President',
+      category: 'leader',
+      image: '/media/DSC01903.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/DSC01903.jpg',
+      bio: 'Leading DSA Media Crew with a vision to transform campus storytelling through cinematic excellence, high-octane coverage, and creative leadership. Passionate about narrative pacing, visual scale, and building a high-impact creative team.',
+      tagline: 'Turning fleeting moments into timeless cinema.',
+      specialty: 'MOTION / CINEMATOGRAPHY / CREATIVE DIRECTION',
+      skills: ['Cinematography', 'Creative Direction', 'Storyboarding', 'Camera Operations', 'Color Grading', 'Team Leadership', 'Live Event Production'],
+      mediaDNA: {
+        storytelling: 20,
+        cinematography: 18,
+        editing: 15,
+        creativity: 19,
+        leadership: 28
+      },
+      credits: ['Meraki 2026', 'Annual Fest 2025', 'Tech Fest 2025', 'Cultural Night', 'Orientation Mega-Reel', 'Hackathon National Coverage'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        linkedin: 'https://linkedin.com',
+        youtube: 'https://youtube.com'
+      },
+      portfolio: {
+        photos: [
+          { url: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=600', event: 'Annual Fest 2025', date: '2025-03-15', role: 'Lead Photographer' },
+          { url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=600', event: 'Tech Fest 2025', date: '2025-02-20', role: 'Camera 01' },
+          { url: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=600', event: 'Freshers 2026', date: '2026-01-10', role: 'Director' }
+        ],
+        videos: [
+          { url: 'videos/digital_3d_logo.mp4', thumbnail: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800', project: 'Annual Fest Aftermovie', event: 'Annual Fest 2025', year: '2025', role: 'Director & Lead' },
+          { url: 'videos/digital_3d_logo.mp4', thumbnail: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800', project: 'Tech Highlights', event: 'Tech Fest 2025', year: '2025', role: 'Cinematographer' }
+        ]
+      },
+      artwork: []
+    },
+    vicePresidents: [
+      {
+        id: 'vp1',
+        name: 'Anshiv',
+        role: 'Vice President',
+        category: 'leader',
+        image: '/media/DSC01854-2.jpg',
+        fallbackImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=face',
+        overlayImage: '/media/anshiv-overlay.png',
+        bio: 'Vice President and lead photographer at DSA Media Crew. Known for framing candid human emotions with crisp natural lighting, editorial-grade portraits, and spearheading event execution.',
+        tagline: 'Every frame holds an unspoken story.',
+        specialty: 'PORTRAITURE / EDITORIAL / EVENT SPECIALIST',
+        skills: ['Portrait Photography', 'Editorial Lighting', 'Event Direction', 'Photo Retouching', 'Visual Composition', 'Crew Management'],
+        mediaDNA: {
+          storytelling: 17,
+          cinematography: 18,
+          editing: 20,
+          creativity: 18,
+          leadership: 27
+        },
+        credits: ['Freshers 2026', 'Annual Fest 2025', 'Cultural Gala', 'Sports Conclave 2025', 'Faculty Portraits 2025'],
+        socials: {
+          instagram: 'https://instagram.com/dsamediacrew',
+          linkedin: 'https://linkedin.com',
+          behance: 'https://behance.net'
+        },
+        portfolio: {
+          photos: [
+            { url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600', event: 'Freshers 2026', date: '2026-01-10', role: 'Lead Photographer' },
+            { url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600', event: 'Cultural Night', date: '2025-04-10', role: 'Portrait Specialist' }
+          ],
+          videos: []
+        },
+        artwork: []
+      },
+      {
+        id: 'vp2',
+        name: 'Tajesh',
+        role: 'Advisor & Creative Consultant',
+        category: 'leader',
+        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=face',
+        fallbackImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=face',
+        bio: 'Senior Advisor and post-production powerhouse who crafts rhythmic narratives, color grades complex multicam footage, and mentors the media crew in high-end VFX & sound design.',
+        tagline: 'Crafting narratives frame by intentional frame.',
+        specialty: 'POST-PRODUCTION / MOTION / COLOR SCIENCE',
+        skills: ['Video Editing', 'Motion Graphics', 'DaVinci Resolve', 'Sound Design', 'Adobe Premiere Pro', 'Post-Production Workflow'],
+        mediaDNA: {
+          storytelling: 18,
+          cinematography: 12,
+          editing: 25,
+          creativity: 17,
+          leadership: 28
+        },
+        credits: ['Annual Fest Aftermovie 2025', 'Tech Fest Mega Teaser', 'Freshers Promo 2026', 'Alumni Meet Recap', 'Induction Video'],
+        socials: {
+          instagram: 'https://instagram.com/dsamediacrew',
+          linkedin: 'https://linkedin.com',
+          youtube: 'https://youtube.com'
+        },
+        portfolio: {
+          photos: [],
+          videos: [
+            { url: 'videos/digital_3d_logo.mp4', thumbnail: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800', project: 'Annual Fest Aftermovie', event: 'Annual Fest 2025', year: '2025', role: 'Lead Editor' },
+            { url: 'videos/digital_3d_logo.mp4', thumbnail: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800', project: 'Freshers Promo', event: 'Freshers 2026', year: '2026', role: 'Editor & Motion' }
+          ]
+        },
+        artwork: []
+      }
+    ]
+  },
+
+  members: [
+    {
+      id: 'm1',
+      name: 'Rahul Sharma',
+      role: 'Videography Head & Lead Editor',
+      category: 'videography',
+      image: '/media/DSC01903.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/rahul-overlay.png',
+      bio: "Hi, I'm Rahul Sharma from Rajouri, J&K, pursuing B.Tech CSE at CGC University, Mohali. I'm the Videography Head at DSA Media Crew specializing in cinematography and video editing. I've worked on video collaborations with artists like Sunanda Sharma, Tania and others, capturing moments through creative storytelling and cinematic visuals.",
+      tagline: 'Capturing the pulse of raw emotion in motion.',
+      specialty: 'CINEMATIC / STORYTELLING / CELEB COLLABS',
+      skills: ['Videography', 'Cinematography', 'Multicam Editing', 'Artist Collaborations', 'Gimbal Operations', 'Speed Ramping', 'Sound Sync'],
+      mediaDNA: {
+        storytelling: 22,
+        cinematography: 24,
+        editing: 22,
+        creativity: 20,
+        leadership: 22
+      },
+      credits: ['Sunanda Sharma Collab', 'Tania Artist Showcase', 'Freshers 2026 Aftermovie', 'Annual Fest 2025', 'Youth Festival'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        linkedin: 'https://linkedin.com'
+      },
+      portfolio: {
+        photos: [
+          { url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=600', event: 'Sports Day 2025', date: '2025-02-15', role: 'Event Videographer' },
+          { url: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=600', event: 'Annual Fest 2025', date: '2025-03-15', role: 'Cinematography' }
+        ],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm2',
+      name: 'Viney Tosh Verma',
+      role: 'Lead Cinematographer & Drone Pilot',
+      category: 'photography',
+      image: '/media/DSC01921-2.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/viney-overlay.png',
+      bio: 'Dedicated cinematographer and aerial drone specialist. Capturing grand amphitheater shots, rapid concert dynamics, and lighting moods that give campus events an international concert aesthetic.',
+      tagline: 'Perspective shifts from ground to sky.',
+      specialty: 'AERIALS / DYNAMIC MOVEMENT / GIG COVERAGE',
+      skills: ['Cinematography', 'FPV & Drone Flight', 'Low-Light Capture', 'Concert Videography', 'Rig & Gimbal Mastery'],
+      mediaDNA: {
+        storytelling: 20,
+        cinematography: 25,
+        editing: 18,
+        creativity: 20,
+        leadership: 22
+      },
+      credits: ['Tech Fest Aerial Highlights', 'Celebrity Star Night', 'Annual Fest 2025', 'Hackathon 36-Hr Stream', 'Sports Meet'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        youtube: 'https://youtube.com'
+      },
+      portfolio: {
+        photos: [],
+        videos: [
+          { url: 'videos/digital_3d_logo.mp4', thumbnail: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800', project: 'Tech Fest Coverage', event: 'Tech Fest 2025', year: '2025', role: 'Drone Operator' }
+        ]
+      },
+      artwork: []
+    },
+    {
+      id: 'm3',
+      name: 'Anshul Toppo',
+      role: 'Photography Head',
+      category: 'photography',
+      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face',
+      fallbackImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face',
+      bio: 'Photography Head steering visual coverage across festivals, sports, and formal ceremonies. Expert at freezing decisive moments and organizing field photography teams for instant coverage.',
+      tagline: 'Freezing the moment before it fades.',
+      specialty: 'EVENT PHOTOGRAPHY / COMPOSITION / CAMPAIGNS',
+      skills: ['Event Photography', 'Photo Direction', 'Adobe Lightroom', 'Action Photography', 'Photojournalism', 'Color Correction'],
+      mediaDNA: {
+        storytelling: 20,
+        cinematography: 20,
+        editing: 18,
+        creativity: 24,
+        leadership: 26
+      },
+      credits: ['Annual Fest Official Album', 'Convocation 2025', 'Freshers Highlights', 'National Sports Meet', 'Inter-College Fest'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        behance: 'https://behance.net'
+      },
+      portfolio: {
+        photos: [
+          { url: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600', event: 'Annual Fest Album', date: '2025-03-01', role: 'Lead Photographer' },
+          { url: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=600', event: 'Freshers Campaign', date: '2026-01-05', role: 'Creative Direction' }
+        ],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm4',
+      name: 'Prince Kumar',
+      role: 'Secretary & Motion Specialist',
+      category: 'editing',
+      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&h=1000&fit=crop&crop=face',
+      fallbackImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&h=1000&fit=crop&crop=face',
+      bio: 'Secretary and post-production specialist focused on rapid-turnaround festival recaps, punchy transitions, and synchronized bass-heavy sound design that hooks audiences instantly.',
+      tagline: 'Pacing and rhythm that demands attention.',
+      specialty: 'RECAPS / FAST PACING / SOUND DESIGN',
+      skills: ['Adobe Premiere Pro', 'After Effects', 'Multicam Sync', 'Color Pencils & LUTS', 'Reel Editing', 'Sound Design'],
+      mediaDNA: {
+        storytelling: 20,
+        cinematography: 14,
+        editing: 28,
+        creativity: 18,
+        leadership: 26
+      },
+      credits: ['Festival Daily Recaps', 'Meraki Teaser Series', 'Freshers Promo', 'Club Induction Video'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        youtube: 'https://youtube.com'
+      },
+      portfolio: {
+        photos: [],
+        videos: [
+          { url: 'videos/digital_3d_logo.mp4', thumbnail: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800', project: 'Tech Fest Recap', event: 'Tech Fest 2025', year: '2025', role: 'Editor' }
+        ]
+      },
+      artwork: []
+    },
+    {
+      id: 'm5',
+      name: 'Arush Dev Pandey',
+      role: 'Graphic Designer & Videographer',
+      category: 'design',
+      image: '/media/DSC02141.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/arush-overlay.png',
+      bio: 'Multidisciplinary creative merging graphic aesthetics with cinematic video. Crafts poster art, motion backdrops, and promotional visual systems that establish unforgettable event branding.',
+      tagline: 'Blending visual identity with motion.',
+      specialty: 'VISUAL IDENTITY / KEY VISUALS / HYBRID MEDIA',
+      skills: ['Graphic Design', 'Poster Key Visuals', 'Photoshop', 'Illustrator', 'Videography', 'Social Media Design'],
+      mediaDNA: {
+        storytelling: 24,
+        cinematography: 16,
+        editing: 18,
+        creativity: 24,
+        leadership: 22
+      },
+      credits: ['Meraki 26 Brand Assets', 'Annual Fest Poster Pack', 'Freshers Digital Campaign', 'Social Grid Overhaul'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        linkedin: 'https://linkedin.com'
+      },
+      portfolio: {
+        photos: [],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm6',
+      name: 'Aditya Bajaj',
+      role: 'Senior Graphic Designer',
+      category: 'design',
+      image: '/media/DSC01865.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1000&fit=crop&crop=face',
+      bannerImage: '/media/1.png',
+      overlayImage: '/media/aditya-overlay.png',
+      bio: 'Senior graphic designer specialized in bold modern typography, 3D artwork compositions, and brand-level digital marketing assets for flagship university events.',
+      tagline: 'Bold typography and unmistakable visual impact.',
+      specialty: 'BRANDING / TYPOGRAPHY / SOCIAL ASSETS',
+      skills: ['Graphic Design', 'Typography', 'Brand Identity', 'Adobe Photoshop', 'Figma', 'Print Media & Merchandise'],
+      mediaDNA: {
+        storytelling: 20,
+        cinematography: 14,
+        editing: 18,
+        creativity: 26,
+        leadership: 24
+      },
+      credits: ['DSA Media Official Merch', 'Meraki 26 Posters', 'Instagram Campaign Grids', 'Event Brochures'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        linkedin: 'https://linkedin.com'
+      },
+      portfolio: {
+        photos: [
+          { url: '/media/DSC01865.jpg', event: 'Portfolio Work', date: '2025-08-19', role: 'Graphic Designer' }
+        ],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm7',
+      name: 'Bhoomika Chauhan',
+      role: 'Design Head',
+      category: 'leader',
+      image: '/media/DSC01937-2.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face',
+      bannerImage: '/media/3.png',
+      overlayImage: '/media/bhoomika-overlay.png',
+      bio: 'Design Head leading the creative team in defining visual guidelines, promotional campaigns, digital banners, and stage backdrops across all media crew projects.',
+      tagline: 'Design is thinking made visual.',
+      specialty: 'CREATIVE DIRECTION / BRAND SYSTEMS / UI',
+      skills: ['Design Leadership', 'Creative Direction', 'Brand Strategy', 'Adobe Illustrator', 'Photoshop', 'Visual Guidelines'],
+      mediaDNA: {
+        storytelling: 20,
+        cinematography: 16,
+        editing: 18,
+        creativity: 28,
+        leadership: 30
+      },
+      credits: ['Design System 2026', 'Stage LED Graphics', 'Festival ID Cards & Passes', 'Social Media Branding'],
+      socials: {
+        linkedin: 'https://linkedin.com',
+        instagram: 'https://instagram.com/dsamediacrew'
+      },
+      portfolio: {
+        photos: [],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm8',
+      name: 'Sujal Kumar Sandal',
+      role: 'Videographer & Colorist',
+      category: 'videography',
+      image: '/media/DSC01916-2.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/sujal-overlay.png',
+      bio: "I'm Sujal Kumar, from Himachal Pradesh, a videographer and video editor passionate about crafting cinematic visuals that inspire and connect. As a member of DSA Media Crew, I specialize in creating high-quality films and engaging visual content with a focus on storytelling, creativity, and attention to detail.",
+      tagline: 'Visual poetry through intentional framing.',
+      specialty: 'CINEMATOGRAPHY / COLOR / MOVEMENT',
+      skills: ['Videography', 'Color Grading', 'Gimbal Camerawork', 'Event Documentation', 'Video Production', 'Lighting'],
+      mediaDNA: {
+        storytelling: 20,
+        cinematography: 22,
+        editing: 20,
+        creativity: 20,
+        leadership: 22
+      },
+      credits: ['Freshers 2026 Reel Series', 'Campus Life Documentary', 'Sports Highlights', 'Club Teasers'],
+      socials: {
+        linkedin: 'https://linkedin.com',
+        instagram: 'https://instagram.com/dsamediacrew'
+      },
+      portfolio: {
+        photos: [],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm9',
+      name: 'Rohan Kaushik',
+      role: 'Vlogger & Campus Storyteller',
+      category: 'vlogging',
+      image: '/media/DSC01908-2.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/rohan-overlay.png',
+      bio: 'Dynamic vlogger and street storyteller capturing backstage crew energy, spontaneous campus reactions, and authentic unscripted student life moments.',
+      tagline: 'Unfiltered stories right from the ground.',
+      specialty: 'VLOGS / BTS / ON-GROUND ENGAGEMENT',
+      skills: ['Vlogging', 'Mobile Journalism', 'BTS Capture', 'Interviews', 'Rapid Reel Turnaround', 'Storytelling'],
+      mediaDNA: {
+        storytelling: 26,
+        cinematography: 16,
+        editing: 22,
+        creativity: 24,
+        leadership: 20
+      },
+      credits: ['Campus Vlogs 2025-26', 'Backstage Access Pass', 'Freshers Reaction Vlogs', 'Fest BTS Diaries'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew'
+      },
+      portfolio: {
+        photos: [
+          { url: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600', event: 'Campus Life', date: '2025-02-01', role: 'Documentary Vlogger' }
+        ],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm10',
+      name: 'Navneet Khajuria',
+      role: 'Secretary & Motion Designer',
+      category: 'leader',
+      image: '/media/DSC01897-2.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/navneet-overlay.png',
+      bio: "Hi, I'm Navneet from Udhampur, J&K, pursuing B.Tech AI & Machine Learning. Serving as Secretary, Video Editor, and Cinematographer, bringing high-tech 3D titles, animated assets, and cinematic flair to DSA Media productions.",
+      tagline: 'Where code and creativity converge.',
+      specialty: 'MOTION GRAPHICS / 3D INTROS / CINEMATOGRAPHY',
+      skills: ['Motion Graphics', 'After Effects', 'Cinematography', '3D Titles', 'AI Enhanced Editing', 'Premiere Pro'],
+      mediaDNA: {
+        storytelling: 20,
+        cinematography: 22,
+        editing: 26,
+        creativity: 24,
+        leadership: 26
+      },
+      credits: ['Digital 3D Logo Intro', 'Festival Opener Sequences', 'Tech Fest Mainstage Visuals', 'Meraki 26 Reveal'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        behance: 'https://behance.net'
+      },
+      portfolio: {
+        photos: [],
+        videos: [
+          { url: 'videos/digital_3d_logo.mp4', thumbnail: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800', project: 'Animated Intro', event: 'Annual Fest 2025', year: '2025', role: 'Motion Designer' }
+        ]
+      },
+      artwork: []
+    },
+    {
+      id: 'm11',
+      name: 'Divya Jishtu',
+      role: 'On-Screen Actor & Anchor',
+      category: 'onscreen',
+      image: '/media/DSC09737.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face',
+      bannerImage: '/media/divya.png',
+      overlayImage: '/media/divya-overlay.png',
+      bio: "Hi, I'm Divya from Himachal Pradesh, currently pursuing B.Sc. AOTT. Alongside my academics, I'm an on-screen actor with DSA Media Crew and a passionate dancer. I love exploring creativity, performing, and continuously growing through new experiences.",
+      tagline: 'Charisma that lights up every frame.',
+      specialty: 'ANCHORING / ON-CAMERA / DANCE & STAGE',
+      skills: ['On-Camera Presenting', 'Anchoring & Hosting', 'Stage Performance', 'Dance', 'Audience Engagement', 'Interviewing'],
+      mediaDNA: {
+        storytelling: 24,
+        cinematography: 18,
+        editing: 16,
+        creativity: 24,
+        leadership: 24
+      },
+      credits: ['Live Fest Anchoring', 'Red Carpet Interviews', 'Meraki Stage Host', 'Promotional Sketches'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        youtube: 'https://youtube.com'
+      },
+      portfolio: {
+        photos: [],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm12',
+      name: 'Anushka Mehta',
+      role: 'On-Screen Actor & Creative Presenter',
+      category: 'onscreen',
+      image: '/media/DSC01929-2.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&h=1000&fit=crop&crop=face',
+      bannerImage: '/media/2.png',
+      overlayImage: '/media/anushka-overlay.png',
+      bio: 'Creative on-screen talent producing viral reels, interactive student challenges, and energetic hosting segments across campus social channels.',
+      tagline: 'Sparking connection through infectious energy.',
+      specialty: 'HOSTING / VIRAL REELS / ENGAGEMENT',
+      skills: ['On-Screen Acting', 'Viral Content Ideation', 'Public Speaking', 'Social Media Trends', 'Hosting'],
+      mediaDNA: {
+        storytelling: 26,
+        cinematography: 14,
+        editing: 18,
+        creativity: 26,
+        leadership: 22
+      },
+      credits: ['Campus Vox-Pop Series', 'Freshers Welcome Special', 'Instagram Viral Challenges', 'Fest Promo Host'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew'
+      },
+      portfolio: {
+        photos: [],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm13',
+      name: 'Garima Hetta',
+      role: 'On-Screen Actor & Content Lead',
+      category: 'onscreen',
+      image: '/media/DSC01949-2.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&h=1000&fit=crop&crop=face',
+      bannerImage: '/media/garima.png',
+      overlayImage: '/media/garima-overlay.png',
+      bio: 'On-screen actress and content creator known for sharp comic timing, engaging promotional narratives, and front-of-camera leadership.',
+      tagline: 'Captivating audiences with authentic expression.',
+      specialty: 'PRESENTING / SHORT-FORM / EXPRESSIONS',
+      skills: ['Acting', 'Presenter', 'Short-form Content', 'Script Delivery', 'Event Emceeing'],
+      mediaDNA: {
+        storytelling: 26,
+        cinematography: 14,
+        editing: 20,
+        creativity: 26,
+        leadership: 24
+      },
+      credits: ['Official Festival Promo', 'Star Night Special Reel', 'Orientation Anchor', 'Viral Comedy Skits'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        youtube: 'https://youtube.com'
+      },
+      portfolio: {
+        photos: [],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm14',
+      name: 'Harman Ghuman',
+      role: 'Video Editor & Colorist',
+      category: 'editing',
+      image: '/media/DSC02145-3.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/harman-overlay.png',
+      bio: 'Master of pacing and sync, specializing in modern vertical reels, high-energy beat drops, and sharp stylized color treatments.',
+      tagline: 'Every millisecond cut with precision.',
+      specialty: 'FAST CUTS / TIKTOK STYLE / COLOR',
+      skills: ['Short-form Video Editing', 'CapCut & Premiere Pro', 'Sound Design', 'Beat Syncing', 'Color Grading'],
+      mediaDNA: {
+        storytelling: 20,
+        cinematography: 14,
+        editing: 30,
+        creativity: 22,
+        leadership: 20
+      },
+      credits: ['Trending Fest Reels (100k+ views)', 'Sports Promo Cut', 'Afterparty Reel', 'DJ Night Recaps'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        youtube: 'https://youtube.com'
+      },
+      portfolio: {
+        photos: [],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm15',
+      name: 'Kartik Verma',
+      role: 'Videographer & Drone Cinematographer',
+      category: 'videography',
+      image: '/media/kartik-overlay.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/kartik-overlay.png',
+      bio: 'Versatile videographer with an eye for dynamic angles, handheld stabilizer tracking, and outdoor cinematic capture.',
+      tagline: 'Moving with the action, capturing the heat.',
+      specialty: 'ACTION SHOOTING / MULTICAM / REEL WORKFLOW',
+      skills: ['Videography', 'Drone Operations', 'Action Camerawork', 'Premiere Pro', 'Event Coverage'],
+      mediaDNA: {
+        storytelling: 18,
+        cinematography: 24,
+        editing: 22,
+        creativity: 20,
+        leadership: 22
+      },
+      credits: ['Sports Fest Action Reels', 'Dance Battle Multi-Cam', 'Campus Cinematic Tour', 'Meraki BTS'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        youtube: 'https://youtube.com'
+      },
+      portfolio: {
+        photos: [],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm16',
+      name: 'Palak Sharma',
+      role: 'Content Creator & Media Strategist',
+      category: 'content',
+      image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&h=1000&fit=crop&crop=face',
+      fallbackImage: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&h=1000&fit=crop&crop=face',
+      bio: 'Content creator and media strategist crafting compelling copy, viral post structures, and engagement plans that elevate DSA Media Crew\'s digital footprint.',
+      tagline: 'Words and strategy that drive digital resonance.',
+      specialty: 'COPYWRITING / SOCIAL STRATEGY / CAMPAIGNS',
+      skills: ['Copywriting', 'Content Strategy', 'Social Media Analytics', 'Campaign Management', 'Story Architecture'],
+      mediaDNA: {
+        storytelling: 28,
+        cinematography: 12,
+        editing: 18,
+        creativity: 26,
+        leadership: 24
+      },
+      credits: ['Social Media Growth Plan', 'Official Event Press Releases', 'Instagram Captions & Stories', 'Newsletter'],
+      socials: {
+        instagram: 'https://instagram.com/dsamediacrew',
+        linkedin: 'https://linkedin.com'
+      },
+      portfolio: {
+        photos: [
+          { url: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600', event: 'Campus Campaign', date: '2025-01-15', role: 'Lead Copywriter' }
+        ],
+        videos: []
+      },
+      artwork: []
+    },
+    {
+      id: 'm17',
+      name: 'Ritik Rikhi',
+      role: 'Technical Lead & Web Architect',
+      category: 'tech',
+      image: '/media/DSC02413-2.jpg',
+      fallbackImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=1000&fit=crop&crop=face',
+      overlayImage: '/media/ritik-overlay.png',
+      bio: 'Technical Lead managing full-stack web platforms, live upload systems, database architectures, server deployments, and digital tools powering DSA Media Crew.',
+      tagline: 'Building the robust digital foundation behind creative magic.',
+      specialty: 'FULL-STACK DEV / SERVER INFRA / SYSTEMS',
+      skills: ['Full-Stack Web Dev', 'Node.js & Express', 'MongoDB', 'Cloudinary API', 'UI/UX Architecture', 'Server Infrastructure'],
+      mediaDNA: {
+        storytelling: 16,
+        cinematography: 14,
+        editing: 18,
+        creativity: 22,
+        leadership: 35
+      },
+      credits: ['DSA Media Official Platform', 'Live Media Upload Portal', 'Interactive Team & Gallery Systems', 'API & Cloud Engine'],
+      socials: {
+        linkedin: 'https://linkedin.com',
+        github: 'https://github.com',
+        instagram: 'https://instagram.com/dsamediacrew'
+      },
+      portfolio: {
+        photos: [],
+        videos: []
+      },
+      artwork: []
+    }
+  ]
+};
+
+// Helper function to get all members including leadership
+function getAllMembers() {
+  return [teamData.leadership.president, ...teamData.leadership.vicePresidents, ...teamData.members];
+}
+
+// Helper function to get members by category
+function getMembersByCategory(categoryId) {
+  const all = getAllMembers();
+  if (!categoryId || categoryId === 'all') {
+    return all;
+  }
+  if (categoryId === 'leader') {
+    return all.filter(member => 
+      member.category === 'leader' ||
+      (member.role && (
+        member.role.toLowerCase().includes('president') ||
+        member.role.toLowerCase().includes('head') ||
+        member.role.toLowerCase().includes('lead') ||
+        member.role.toLowerCase().includes('secretary') ||
+        member.role.toLowerCase().includes('advisor')
+      ))
+    );
+  }
+  return all.filter(member => member.category.toLowerCase() === categoryId.toLowerCase());
+}
+
+// Helper function to get member by ID
+function getMemberById(id) {
+  return getAllMembers().find(member => member.id === id);
+}
+
+// Helper function to get category name by ID
+function getCategoryName(categoryId) {
+  const category = teamData.categories.find(cat => cat.id.toLowerCase() === categoryId.toLowerCase());
+  return category ? category.name : categoryId.toUpperCase();
+}

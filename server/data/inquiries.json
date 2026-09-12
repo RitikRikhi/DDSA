@@ -1,0 +1,58 @@
+[
+  {
+    "name": "Test User",
+    "email": "test@example.com",
+    "purpose": "Collaboration",
+    "message": "Hello from automated verification",
+    "createdAt": "2026-09-11T04:30:32.830Z"
+  },
+  {
+    "name": "Production Audit Test",
+    "email": "audit@dsamedia.test",
+    "purpose": "Fest Coverage",
+    "message": "Testing contact submission resilience",
+    "createdAt": "2026-09-11T04:42:52.290Z"
+  },
+  {
+    "name": "Ritik Rikhi",
+    "email": "rikhiritik8@gmail.com",
+    "purpose": "Book us for an event",
+    "message": "demoo",
+    "createdAt": "2026-09-11T08:24:23.695Z"
+  },
+  {
+    "name": "Ritik Rikhi",
+    "email": "rikhiritik8@gmail.com",
+    "purpose": "Join the club",
+    "message": "DEMOO",
+    "createdAt": "2026-09-12T04:31:00.086Z"
+  },
+  {
+    "name": "Test User",
+    "email": "testuser@example.com",
+    "purpose": "Collaboration",
+    "message": "Testing contact form submission",
+    "createdAt": "2026-09-12T04:39:31.931Z"
+  },
+  {
+    "name": "Ritik Rikhi",
+    "email": "mcrewdsa@gmail.com",
+    "purpose": "Collaboration",
+    "message": "Test message to verify instant email delivery!",
+    "createdAt": "2026-09-12T04:47:58.280Z"
+  },
+  {
+    "name": "Ritik Rikhi",
+    "email": "rikhiritik8@gmail.com",
+    "purpose": "Collaboration",
+    "message": "i want to do collaborate",
+    "createdAt": "2026-09-12T04:49:02.400Z"
+  },
+  {
+    "name": "Ritik Rikhi",
+    "email": "rikhiritik8@gmail.com",
+    "purpose": "Book us for an event",
+    "message": "demo",
+    "createdAt": "2026-09-12T10:24:45.652Z"
+  }
+]

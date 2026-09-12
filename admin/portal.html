@@ -1,0 +1,2754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Media Crew — SaaS Admin Suite</title>
+  
+  <!-- Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-matte: #090a10;
+      --bg-sidebar: #0d0f18;
+      --bg-card: rgba(18, 22, 34, 0.7);
+      --bg-card-solid: #121624;
+      --bg-card-hover: rgba(26, 32, 50, 0.85);
+      --bg-input: rgba(14, 18, 28, 0.9);
+      --bg-glass: rgba(18, 22, 34, 0.65);
+      
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-focus: #6366f1;
+      --border-hover: rgba(255, 255, 255, 0.16);
+
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --accent-glow: rgba(99, 102, 241, 0.35);
+      --accent-violet: #8b5cf6;
+      
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+
+      --gold: #b8a06a;
+      --red: #ef4444;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --cyan: #06b6d4;
+
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 24px;
+
+      --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--border-subtle);
+      --shadow-glow: 0 0 25px -5px var(--accent-glow);
+      --transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background-color: var(--bg-matte);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, .heading-font {
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: -0.02em;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.24);
+    }
+
+    /* ===================================================
+       SIDEBAR NAVIGATION
+       =================================================== */
+    .sidebar {
+      width: 270px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-subtle);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+      transition: var(--transition);
+      backdrop-filter: blur(20px);
+    }
+
+    .sidebar-header {
+      padding: 1.5rem 1.4rem 1.2rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .brand-symbol {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #c8102e 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 800;
+      font-size: 1.1rem;
+      font-family: 'Space Grotesk', sans-serif;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    .brand-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .sidebar-nav {
+      padding: 1.2rem 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .nav-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      padding: 0.8rem 0.8rem 0.4rem 0.8rem;
+      font-weight: 600;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius-md);
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      user-select: none;
+    }
+
+    .nav-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .nav-icon {
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-main);
+    }
+
+    .nav-item.active {
+      background: rgba(99, 102, 241, 0.12);
+      color: #818cf8;
+      font-weight: 600;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.15);
+    }
+
+    .nav-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .nav-item.active .nav-badge {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Sidebar Footer */
+    .sidebar-footer {
+      padding: 1rem 1.2rem;
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(0,0,0,0.2);
+    }
+
+    .admin-profile-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .admin-profile-pill:hover {
+      background: rgba(255,255,255,0.05);
+    }
+
+    .admin-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #6366f1, #c8102e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.1);
+    }
+
+    .admin-meta {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .admin-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .admin-role {
+      font-size: 0.7rem;
+      color: var(--text-dim);
+    }
+
+    /* ===================================================
+       MAIN LAYOUT & STICKY TOPBAR
+       =================================================== */
+    .main-wrapper {
+      margin-left: 270px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      position: relative;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      height: 68px;
+      background: rgba(9, 10, 16, 0.85);
+      backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .page-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+    }
+
+    .breadcrumb-root { color: var(--text-dim); }
+    .breadcrumb-sep { color: var(--border-subtle); }
+    .breadcrumb-current { font-weight: 600; color: var(--text-main); }
+
+    .command-search {
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.5rem 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 320px;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .command-search:hover {
+      border-color: var(--border-hover);
+      color: var(--text-main);
+    }
+
+    .kbd-shortcut {
+      margin-left: auto;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-dim);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .live-status-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: var(--green);
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.2); }
+    }
+
+    .btn-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .btn-icon:hover {
+      color: var(--text-main);
+      border-color: var(--border-hover);
+      background: var(--bg-card-hover);
+    }
+
+    .notif-badge {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .btn-create {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.55rem 1.1rem;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 18px var(--accent-glow);
+      transition: var(--transition);
+    }
+
+    .btn-create:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(99, 102, 241, 0.5);
+    }
+
+    /* ===================================================
+       PAGE VIEWS CONTAINER
+       =================================================== */
+    .content-container {
+      padding: 2rem;
+      max-width: 1480px;
+      width: 100%;
+      margin: 0 auto;
+      flex: 1;
+    }
+
+    .page-view {
+      display: none;
+      animation: fadeIn 0.25s ease-in-out;
+    }
+
+    .page-view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glass Cards */
+    .glass-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      backdrop-filter: blur(20px);
+      padding: 1.6rem;
+      box-shadow: var(--shadow-card);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .glass-card:hover {
+      border-color: var(--border-hover);
+    }
+
+    /* Section Header */
+    .view-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .view-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+    }
+
+    .view-desc {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* ===================================================
+       DASHBOARD VIEW
+       =================================================== */
+    .welcome-banner {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.08) 50%, rgba(200, 16, 46, 0.08) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: var(--radius-xl);
+      padding: 2rem 2.2rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-banner::before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.25), transparent 70%);
+      top: -100px;
+      right: 0;
+      pointer-events: none;
+    }
+
+    .welcome-text h2 {
+      font-size: 1.8rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .welcome-text p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 620px;
+    }
+
+    /* KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.4rem;
+      margin-bottom: 2rem;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-card);
+      transition: var(--transition);
+    }
+
+    .kpi-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .kpi-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+    }
+
+    .kpi-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-dim);
+    }
+
+    .kpi-icon-wrap {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .kpi-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    .kpi-trend {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+
+    .trend-up { color: var(--green); }
+    .trend-down { color: var(--red); }
+
+    /* Dashboard 2-Col Layout */
+    .dash-columns {
+      display: grid;
+      grid-template-columns: 2fr 1.2fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 280px;
+      width: 100%;
+      margin-top: 1rem;
+    }
+
+    /* Activity Feed */
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .activity-item {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding-bottom: 0.9rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .activity-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+
+    .activity-desc {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--text-main);
+    }
+
+    .activity-time {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* ===================================================
+       EVENTS VIEW (KANBAN & LIST)
+       =================================================== */
+    .view-switch-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .segment-switch {
+      background: var(--bg-card-solid);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 3px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .segment-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.45rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: var(--transition);
+    }
+
+    .segment-btn.active {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    /* Kanban Board */
+    .kanban-board {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .kanban-col {
+      background: rgba(14, 17, 26, 0.7);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      min-height: 500px;
+    }
+
+    .kanban-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .col-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .col-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .dot-planning { background: var(--amber); }
+    .dot-live { background: var(--green); box-shadow: 0 0 8px var(--green); }
+    .dot-completed { background: #818cf8; }
+
+    .kanban-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .kanban-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    }
+
+    .card-cover {
+      width: 100%;
+      height: 110px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+    }
+
+    .event-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .event-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+
+    .avatar-stack img, .avatar-stack .mini-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--bg-card-solid);
+      margin-left: -8px;
+      object-fit: cover;
+      background: #2a2e3f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .avatar-stack img:first-child, .avatar-stack .mini-avatar:first-child {
+      margin-left: 0;
+    }
+
+    /* ===================================================
+       TEAM MEMBERS VIEW
+       =================================================== */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .team-card-saas {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      box-shadow: var(--shadow-card);
+    }
+
+    .team-card-saas:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.5);
+    }
+
+    .team-banner-header {
+      height: 100px;
+      background: linear-gradient(135deg, #1e1b4b, #0f172a);
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .team-avatar-wrap {
+      margin-top: -45px;
+      padding: 0 1.4rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .team-img-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 4px solid var(--bg-card-solid);
+      object-fit: cover;
+      background: #1e293b;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    }
+
+    .status-badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-available { background: rgba(16, 185, 129, 0.12); color: var(--green); border: 1px solid rgba(16, 185, 129, 0.25); }
+    .badge-duty { background: rgba(99, 102, 241, 0.15); color: #818cf8; border: 1px solid rgba(99, 102, 241, 0.3); }
+
+    .team-card-body {
+      padding: 1.2rem 1.4rem 1.4rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      flex: 1;
+    }
+
+    .team-name-lg {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .team-dept-pill {
+      font-size: 0.75rem;
+      color: var(--accent-violet);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .team-skills-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .skill-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .team-footer-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 8px;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    /* ===================================================
+       CONTENT LIBRARY (DRIVE STYLE)
+       =================================================== */
+    .folder-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .folder-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .folder-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      background: var(--bg-card-hover);
+    }
+
+    .folder-icon {
+      font-size: 1.8rem;
+    }
+
+    .folder-info {
+      overflow: hidden;
+    }
+
+    .folder-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .folder-meta {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .media-files-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .media-card-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .media-card-item:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .media-thumb-box {
+      height: 140px;
+      background: #0f1320;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .media-thumb-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .media-card-item:hover .media-thumb-box img {
+      transform: scale(1.05);
+    }
+
+    .media-card-details {
+      padding: 0.8rem 1rem;
+    }
+
+    .media-file-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+
+    .media-file-meta {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    /* ===================================================
+       EQUIPMENT & INVENTORY
+       =================================================== */
+    .gear-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 1.4rem;
+    }
+
+    .gear-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: var(--transition);
+    }
+
+    .gear-card:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .gear-top {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .gear-img-wrap {
+      width: 70px;
+      height: 70px;
+      border-radius: var(--radius-md);
+      background: #0f1320;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .gear-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .gear-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .gear-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .gear-serial {
+      font-size: 0.72rem;
+      color: var(--text-dim);
+    }
+
+    .gear-status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.7rem 0.9rem;
+      background: rgba(0,0,0,0.25);
+      border-radius: var(--radius-md);
+      font-size: 0.8rem;
+    }
+
+    /* ===================================================
+       DATA TABLES (LIST VIEWS & ATTENDANCE)
+       =================================================== */
+    .saas-table-wrap {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+
+    .saas-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.88rem;
+    }
+
+    .saas-table th {
+      background: rgba(0,0,0,0.3);
+      padding: 1rem 1.2rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .saas-table td {
+      padding: 1rem 1.2rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+    }
+
+    .saas-table tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-main);
+    }
+
+    /* ===================================================
+       MODALS, COMMAND PALETTE, TOASTS
+       =================================================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(16px);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .glass-modal {
+      background: #0f1320;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-xl);
+      width: 100%;
+      max-width: 650px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.8);
+      animation: modalSlide 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalSlide {
+      from { opacity: 0; transform: scale(0.96) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-head {
+      padding: 1.4rem 1.8rem;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-body {
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    .form-row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 0.75rem 1rem;
+      color: var(--text-main);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .modal-foot {
+      padding: 1.2rem 1.8rem;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Command Palette */
+    .cmd-palette-box {
+      width: 100%;
+      max-width: 600px;
+      background: #0f1320;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
+    }
+
+    .cmd-input-wrap {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-subtle);
+      gap: 12px;
+    }
+
+    .cmd-input {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text-main);
+      font-size: 1.1rem;
+      width: 100%;
+    }
+
+    .cmd-results {
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 0.8rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .cmd-item {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .cmd-item:hover, .cmd-item.selected {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--text-main);
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .toast-msg {
+      background: #161b2e;
+      border: 1px solid var(--border-subtle);
+      border-left: 4px solid var(--accent);
+      padding: 0.9rem 1.4rem;
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-size: 0.88rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn 0.25s ease;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .dash-columns { grid-template-columns: 1fr; }
+      .kanban-board { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.mobile-open { transform: translateX(0); }
+      .main-wrapper { margin-left: 0; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .topbar { padding: 0 1rem; }
+      .command-search { display: none; }
+      .content-container { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===================================================
+       SIDEBAR NAVIGATION
+       =================================================== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="#" class="brand-wrap" onclick="switchPage('dashboard')">
+        <div class="brand-symbol">D</div>
+        <div class="brand-title">
+          <span>DSA MEDIA</span>
+          <span class="brand-sub">SAAS ADMIN SUITE</span>
+        </div>
+      </a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-label">Core Management</div>
+      
+      <div class="nav-item active" onclick="switchPage('dashboard', this)">
+        <div class="nav-item-left">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </div>
+      </div>
+
+      <div class="nav-item" onclick="switchPage('events', this)">
+        <div class="nav-item-left">
+          <span class="nav-icon">📅</span>
+          <span>Events</span>
+        </div>
+        <span class="nav-badge" id="sidebarEventsBadge">5</span>
+      </div>
+
+      <div class="nav-item" onclick="switchPage('team', this)">
+        <div class="nav-item-left">
+          <span class="nav-icon">👥</span>
+          <span>Team Members</span>
+        </div>
+        <span class="nav-badge" id="sidebarTeamBadge">20</span>
+      </div>
+
+      <div class="nav-item" onclick="switchPage('content', this)">
+        <div class="nav-item-left">
+          <span class="nav-icon">📁</span>
+          <span>Content Library</span>
+        </div>
+      </div>
+
+      <div class="nav-label">Operations</div>
+
+      <div class="nav-item" onclick="switchPage('attendance', this)">
+        <div class="nav-item-left">
+          <span class="nav-icon">⏱️</span>
+          <span>Attendance</span>
+        </div>
+      </div>
+
+      <div class="nav-item" onclick="switchPage('equipment', this)">
+        <div class="nav-item-left">
+          <span class="nav-icon">🎥</span>
+          <span>Equipment</span>
+        </div>
+        <span class="nav-badge" id="sidebarGearBadge">8</span>
+      </div>
+
+      <div class="nav-item" onclick="switchPage('analytics', this)">
+        <div class="nav-item-left">
+          <span class="nav-icon">📈</span>
+          <span>Analytics</span>
+        </div>
+      </div>
+
+      <div class="nav-label">Preferences</div>
+
+      <div class="nav-item" onclick="switchPage('settings', this)">
+        <div class="nav-item-left">
+          <span class="nav-icon">⚙️</span>
+          <span>Settings</span>
+        </div>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="admin-profile-pill" onclick="switchPage('settings')">
+        <div class="admin-avatar">A</div>
+        <div class="admin-meta">
+          <div class="admin-name">Admin Chief</div>
+          <div class="admin-role">Super Admin</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================================================
+       MAIN CONTENT WRAPPER
+       =================================================== -->
+  <div class="main-wrapper">
+    
+    <!-- Topbar Navigation -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="page-breadcrumb">
+          <span class="breadcrumb-root">DSA Media</span>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-current" id="topbarCurrentPage">Dashboard</span>
+        </div>
+
+        <div class="command-search" onclick="openCmdPalette()">
+          <span>🔍</span>
+          <span>Quick find or command...</span>
+          <span class="kbd-shortcut">⌘K</span>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="live-status-pill">
+          <span class="live-dot"></span>
+          <span>SYSTEM ONLINE</span>
+        </div>
+
+        <button class="btn-icon" onclick="toggleNotifs()" title="Notifications">
+          <span>🔔</span>
+          <span class="notif-badge"></span>
+        </button>
+
+        <a href="/team.html" target="_blank" class="btn-icon" title="View Public Website">
+          <span>↗</span>
+        </a>
+
+        <button class="btn-create" onclick="handleQuickCreate()">
+          <span>+</span>
+          <span>New Action</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Content Views Container -->
+    <main class="content-container">
+
+      <!-- ===================================================
+           1. DASHBOARD VIEW
+           =================================================== -->
+      <section class="page-view active" id="view-dashboard">
+        
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+          <div class="welcome-text">
+            <h2>Welcome back, Chief Admin ⚡</h2>
+            <p>Here's what's happening across DSA Media Crew today: Meraki '26 post-production is in progress and 4 gear units are out on active shoots.</p>
+          </div>
+          <button class="btn-create" onclick="switchPage('events')">View Event Pipeline →</button>
+        </div>
+
+        <!-- 4 KPI Cards -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <span class="kpi-label">Active Creators</span>
+              <div class="kpi-icon-wrap">👥</div>
+            </div>
+            <div class="kpi-value" id="kpiTeamCount">20</div>
+            <div class="kpi-trend trend-up">
+              <span>↑ +2 this month</span>
+              <span style="color: var(--text-dim);">• 100% capacity</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <span class="kpi-label">Live Events</span>
+              <div class="kpi-icon-wrap">📅</div>
+            </div>
+            <div class="kpi-value" id="kpiEventsCount">5</div>
+            <div class="kpi-trend trend-up">
+              <span>↑ 2 active this week</span>
+              <span style="color: var(--text-dim);">• 1 in planning</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <span class="kpi-label">Content Assets</span>
+              <div class="kpi-icon-wrap">📁</div>
+            </div>
+            <div class="kpi-value" id="kpiContentCount">142</div>
+            <div class="kpi-trend trend-up">
+              <span>↑ +28 4K stills</span>
+              <span style="color: var(--text-dim);">• 12.4 GB</span>
+            </div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <span class="kpi-label">Equipment in Use</span>
+              <div class="kpi-icon-wrap">🎥</div>
+            </div>
+            <div class="kpi-value" id="kpiGearCount">4 / 8</div>
+            <div class="kpi-trend trend-up" style="color: var(--amber);">
+              <span>⚡ 50% utilization</span>
+              <span style="color: var(--text-dim);">• 0 overdue</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2-Column Analytics & Activity -->
+        <div class="dash-columns">
+          
+          <!-- Weekly Production Hours Chart -->
+          <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h3 style="font-size: 1.2rem;">Weekly Coverage & Production Hours</h3>
+                <p style="color: var(--text-dim); font-size: 0.8rem;">Aggregated shooting and editing hours logged this week</p>
+              </div>
+              <span class="status-badge badge-duty">Real-time</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="dashboardWeeklyChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Recent Activity Timeline -->
+          <div class="glass-card">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 1.2rem;">Live Activity Feed</h3>
+              <span style="font-size: 0.75rem; color: var(--accent); cursor: pointer;" onclick="refreshDashboard()">Refresh</span>
+            </div>
+            
+            <div class="activity-list" id="dashActivityList">
+              <div class="activity-item">
+                <div class="activity-icon">🎥</div>
+                <div>
+                  <div class="activity-desc"><strong>Prince Kumar</strong> checked out <strong>Sony FX3 Cinema Camera</strong> for Meraki Main Stage.</div>
+                  <div class="activity-time">25 mins ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon">📸</div>
+                <div>
+                  <div class="activity-desc"><strong>Anshiv</strong> uploaded 18 new festival portrait stills to Content Library.</div>
+                  <div class="activity-time">1 hour ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon">🎬</div>
+                <div>
+                  <div class="activity-desc"><strong>Ritik Rikhi</strong> marked <strong>Freshers '26 Recap</strong> as completed in Aftermovies.</div>
+                  <div class="activity-time">3 hours ago</div>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon">📅</div>
+                <div>
+                  <div class="activity-desc">New event created: <strong>TechX Innovations Conclave</strong> assigned to 2 creators.</div>
+                  <div class="activity-time">Yesterday</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================
+           2. EVENTS VIEW
+           =================================================== -->
+      <section class="page-view" id="view-events">
+        
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">EVENTS PIPELINE</h1>
+            <p class="view-desc">Plan, assign, track coverage, and manage multi-camera crew operations.</p>
+          </div>
+          <button class="btn-create" onclick="openEventModal()">+ Create Event</button>
+        </div>
+
+        <div class="view-switch-bar">
+          <div class="segment-switch">
+            <button class="segment-btn active" id="btnKanbanView" onclick="setEventView('kanban')">📋 Kanban Board</button>
+            <button class="segment-btn" id="btnListView" onclick="setEventView('list')">📄 List View</button>
+          </div>
+          <input type="text" id="eventSearch" class="form-input" style="max-width: 280px;" placeholder="Filter events..." oninput="renderEvents()">
+        </div>
+
+        <!-- Kanban View Container -->
+        <div class="kanban-board" id="eventsKanbanContainer">
+          <!-- Column 1: Planning -->
+          <div class="kanban-col">
+            <div class="kanban-header">
+              <div class="col-title"><span class="col-dot dot-planning"></span> Planning</div>
+              <span class="nav-badge" id="countPlanning">0</span>
+            </div>
+            <div class="kanban-cards-wrap" id="colPlanning"></div>
+          </div>
+
+          <!-- Column 2: Live / In Production -->
+          <div class="kanban-col">
+            <div class="kanban-header">
+              <div class="col-title"><span class="col-dot dot-live"></span> Live / On-Duty</div>
+              <span class="nav-badge" id="countLive">0</span>
+            </div>
+            <div class="kanban-cards-wrap" id="colLive"></div>
+          </div>
+
+          <!-- Column 3: Completed -->
+          <div class="kanban-col">
+            <div class="kanban-header">
+              <div class="col-title"><span class="col-dot dot-completed"></span> Completed & Archived</div>
+              <span class="nav-badge" id="countCompleted">0</span>
+            </div>
+            <div class="kanban-cards-wrap" id="colCompleted"></div>
+          </div>
+        </div>
+
+        <!-- List View Container -->
+        <div class="saas-table-wrap" id="eventsListContainer" style="display: none;">
+          <table class="saas-table">
+            <thead>
+              <tr>
+                <th>Event Name</th>
+                <th>Date & Time</th>
+                <th>Venue</th>
+                <th>Assigned Crew</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="eventsTableBody"></tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- ===================================================
+           3. TEAM MEMBERS VIEW
+           =================================================== -->
+      <section class="page-view" id="view-team">
+        
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">CREATORS & CREW</h1>
+            <p class="view-desc">Direct management of official creators, banners, avatars, and proof of work portfolios.</p>
+          </div>
+          <button class="btn-create" onclick="openCreatorModal()">+ Add Creator</button>
+        </div>
+
+        <div class="view-switch-bar">
+          <div class="segment-switch" id="teamCategoryPills">
+            <button class="segment-btn active" onclick="filterTeamCategory('all', this)">All</button>
+            <button class="segment-btn" onclick="filterTeamCategory('leader', this)">Leadership</button>
+            <button class="segment-btn" onclick="filterTeamCategory('photography', this)">Photography</button>
+            <button class="segment-btn" onclick="filterTeamCategory('videography', this)">Videography</button>
+            <button class="segment-btn" onclick="filterTeamCategory('editing', this)">Editing & VFX</button>
+            <button class="segment-btn" onclick="filterTeamCategory('design', this)">Design</button>
+            <button class="segment-btn" onclick="filterTeamCategory('tech', this)">Tech</button>
+          </div>
+          <input type="text" id="teamSearchInput" class="form-input" style="max-width: 280px;" placeholder="Search by name or skill..." oninput="renderTeamGrid()">
+        </div>
+
+        <div class="team-grid" id="teamGridContainer"></div>
+
+      </section>
+
+      <!-- ===================================================
+           4. CONTENT LIBRARY VIEW (DRIVE STYLE)
+           =================================================== -->
+      <section class="page-view" id="view-content">
+        
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">CONTENT LIBRARY</h1>
+            <p class="view-desc">Centralized cloud storage for raw 4K footage, retouched portraits, aftermovies, and graphic assets.</p>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-secondary" onclick="openUploadModal()">+ Upload Media</button>
+            <button class="btn-create" onclick="openUploadModal()">⚡ Fast Upload</button>
+          </div>
+        </div>
+
+        <!-- Folders Grid -->
+        <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-dim); margin-bottom: 1rem; letter-spacing: 1px;">Production Folders</h4>
+        <div class="folder-grid">
+          <div class="folder-card" onclick="filterFolder('aftermovies')">
+            <span class="folder-icon">🎬</span>
+            <div class="folder-info">
+              <div class="folder-name">Aftermovies & Reels</div>
+              <div class="folder-meta">24 videos • 8.2 GB</div>
+            </div>
+          </div>
+          <div class="folder-card" onclick="filterFolder('meraki')">
+            <span class="folder-icon">✨</span>
+            <div class="folder-info">
+              <div class="folder-name">Meraki 2026 RAW</div>
+              <div class="folder-meta">148 photos • 4.1 GB</div>
+            </div>
+          </div>
+          <div class="folder-card" onclick="filterFolder('portraits')">
+            <span class="folder-icon">📸</span>
+            <div class="folder-info">
+              <div class="folder-name">Editorial Portraits</div>
+              <div class="folder-meta">62 photos • 1.9 GB</div>
+            </div>
+          </div>
+          <div class="folder-card" onclick="filterFolder('posters')">
+            <span class="folder-icon">🎨</span>
+            <div class="folder-info">
+              <div class="folder-name">Brand & Posters</div>
+              <div class="folder-meta">35 artworks • 620 MB</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Files Grid -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+          <h4 style="font-size: 0.85rem; text-transform: uppercase; color: var(--text-dim); letter-spacing: 1px;">Recent Media Files</h4>
+          <span style="font-size: 0.8rem; color: var(--accent); cursor: pointer;" onclick="fetchMediaFiles()">Reload</span>
+        </div>
+
+        <div class="media-files-grid" id="mediaFilesGrid"></div>
+
+      </section>
+
+      <!-- ===================================================
+           5. ATTENDANCE & ROSTER VIEW
+           =================================================== -->
+      <section class="page-view" id="view-attendance">
+        
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">ATTENDANCE & PRODUCTION ROSTER</h1>
+            <p class="view-desc">Live duty check-ins, shoot hours tracker, and member participation analytics.</p>
+          </div>
+          <button class="btn-create" onclick="openAttendanceModal()">+ Check In / Log Hours</button>
+        </div>
+
+        <div class="dash-columns" style="margin-bottom: 2rem;">
+          <div class="glass-card">
+            <h3>Monthly Participation Rate</h3>
+            <p style="color: var(--text-dim); font-size: 0.8rem;">Average crew engagement across scheduled productions</p>
+            <div class="chart-container" style="height: 220px;">
+              <canvas id="attendanceRateChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <h3>Quick Duty Stats</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1.2rem;">
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Active Crew on Duty</span>
+                <strong style="color: var(--green);">4 Members</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Total Hours Logged (This Week)</span>
+                <strong>124.5 Hours</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--text-muted);">Top Contributor</span>
+                <strong style="color: var(--gold);">Prince Kumar (38h)</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="saas-table-wrap">
+          <table class="saas-table">
+            <thead>
+              <tr>
+                <th>Creator Name</th>
+                <th>Date</th>
+                <th>Check In</th>
+                <th>Check Out</th>
+                <th>Hours Logged</th>
+                <th>Event / Duty</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="attendanceTableBody"></tbody>
+          </table>
+        </div>
+
+      </section>
+
+      <!-- ===================================================
+           6. EQUIPMENT & INVENTORY VIEW
+           =================================================== -->
+      <section class="page-view" id="view-equipment">
+        
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">EQUIPMENT & GEAR INVENTORY</h1>
+            <p class="view-desc">Track professional cameras, cine lenses, gimbals, audio, and studio lighting in circulation.</p>
+          </div>
+          <button class="btn-create" onclick="openGearModal()">+ Add New Gear</button>
+        </div>
+
+        <div class="view-switch-bar">
+          <div class="segment-switch">
+            <button class="segment-btn active" onclick="filterGear('all', this)">All</button>
+            <button class="segment-btn" onclick="filterGear('Camera', this)">Cameras</button>
+            <button class="segment-btn" onclick="filterGear('Lens', this)">Lenses</button>
+            <button class="segment-btn" onclick="filterGear('Gimbal', this)">Gimbals</button>
+            <button class="segment-btn" onclick="filterGear('Audio', this)">Audio</button>
+            <button class="segment-btn" onclick="filterGear('Lighting', this)">Lighting</button>
+          </div>
+        </div>
+
+        <div class="gear-grid" id="gearGridContainer"></div>
+
+      </section>
+
+      <!-- ===================================================
+           7. ANALYTICS VIEW
+           =================================================== -->
+      <section class="page-view" id="view-analytics">
+        
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">PERFORMANCE & ANALYTICS</h1>
+            <p class="view-desc">In-depth telemetry on content output velocity, shoot participation, and equipment uptime.</p>
+          </div>
+        </div>
+
+        <div class="dash-columns">
+          <div class="glass-card">
+            <h3>Monthly Content Assets Uploaded</h3>
+            <div class="chart-container">
+              <canvas id="analyticsUploadsChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <h3>Equipment Utilization Breakdown</h3>
+            <div class="chart-container">
+              <canvas id="analyticsGearChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="dash-columns">
+          <div class="glass-card">
+            <h3>Department Output Velocity</h3>
+            <div class="chart-container">
+              <canvas id="analyticsDeptChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card">
+            <h3>Key Operational Metrics</h3>
+            <div style="display: flex; flex-direction: column; gap: 1.2rem; margin-top: 1.5rem;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
+                  <span>Event Coverage Success Rate</span>
+                  <strong>98.4%</strong>
+                </div>
+                <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden;">
+                  <div style="width: 98.4%; height: 100%; background: var(--green);"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
+                  <span>Average Turnaround Time (Fest Stills)</span>
+                  <strong>14 Hours</strong>
+                </div>
+                <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden;">
+                  <div style="width: 85%; height: 100%; background: var(--accent);"></div>
+                </div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 4px;">
+                  <span>Storage Utilization</span>
+                  <strong>68% (12.4 GB / 20 GB)</strong>
+                </div>
+                <div style="height: 6px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden;">
+                  <div style="width: 68%; height: 100%; background: var(--accent-violet);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===================================================
+           8. SETTINGS VIEW
+           =================================================== -->
+      <section class="page-view" id="view-settings">
+        
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">PORTAL SETTINGS</h1>
+            <p class="view-desc">Configure admin identity, branding guidelines, role permissions, and data backups.</p>
+          </div>
+          <button class="btn-create" onclick="exportPortalData()">💾 Export Full JSON Backup</button>
+        </div>
+
+        <div class="dash-columns">
+          <div class="glass-card">
+            <h3>Admin Profile</h3>
+            <div class="form-row-2" style="margin-top: 1.2rem;">
+              <div>
+                <label class="form-label">Full Name</label>
+                <input type="text" class="form-input" value="Admin Chief">
+              </div>
+              <div>
+                <label class="form-label">Official Email</label>
+                <input type="email" class="form-input" value="mcrewdsa@gmail.com" readonly>
+              </div>
+            </div>
+            <div style="margin-top: 1rem;">
+              <label class="form-label">Security Password</label>
+              <input type="password" class="form-input" value="••••••••••••">
+            </div>
+            <button class="btn-secondary" style="margin-top: 1.2rem;" onclick="showToast('Profile updated!')">Save Profile</button>
+          </div>
+
+          <div class="glass-card">
+            <h3>Club Identity & Theme</h3>
+            <div style="margin-top: 1.2rem;">
+              <label class="form-label">Organization Title</label>
+              <input type="text" class="form-input" value="DSA Media Crew">
+            </div>
+            <div style="margin-top: 1rem;">
+              <label class="form-label">Primary Tagline</label>
+              <input type="text" class="form-input" value="Visual storytelling through cinematic excellence.">
+            </div>
+            <div style="margin-top: 1rem;">
+              <label class="form-label">Accent Theme</label>
+              <select class="form-input">
+                <option value="violet">Electric Blue-Violet (Default)</option>
+                <option value="crimson">Crimson Red (DSA Classic)</option>
+                <option value="gold">CGC Gold</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ===================================================
+       GLOBAL MODALS
+       =================================================== -->
+
+  <!-- 1. Event Create/Edit Modal -->
+  <div class="modal-backdrop" id="modalEvent">
+    <div class="glass-modal">
+      <div class="modal-head">
+        <h3 id="modalEventTitle">CREATE EVENT</h3>
+        <button class="btn-icon" onclick="closeModal('modalEvent')">&times;</button>
+      </div>
+      <form id="formEvent" onsubmit="saveEvent(event)">
+        <input type="hidden" id="eventFormId">
+        <div class="modal-body">
+          <div>
+            <label class="form-label">Event Name *</label>
+            <input type="text" id="evtName" class="form-input" placeholder="e.g. Annual Fest 2026" required>
+          </div>
+          <div class="form-row-2">
+            <div>
+              <label class="form-label">Date *</label>
+              <input type="date" id="evtDate" class="form-input" required>
+            </div>
+            <div>
+              <label class="form-label">Time</label>
+              <input type="text" id="evtTime" class="form-input" placeholder="10:00 AM - 06:00 PM">
+            </div>
+          </div>
+          <div>
+            <label class="form-label">Venue *</label>
+            <input type="text" id="evtVenue" class="form-input" placeholder="Main Auditorium" required>
+          </div>
+          <div>
+            <label class="form-label">Cover Image URL</label>
+            <input type="text" id="evtCover" class="form-input" placeholder="https://images.unsplash.com/...">
+          </div>
+          <div class="form-row-2">
+            <div>
+              <label class="form-label">Status</label>
+              <select id="evtStatus" class="form-input">
+                <option value="planning">Planning</option>
+                <option value="live">Live / In-Progress</option>
+                <option value="completed">Completed</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Assigned Crew (Comma-separated)</label>
+              <input type="text" id="evtCrew" class="form-input" placeholder="Prince Kumar, Anshiv">
+            </div>
+          </div>
+          <div>
+            <label class="form-label">Description</label>
+            <textarea id="evtDesc" class="form-input" style="min-height: 80px;" placeholder="Event coverage goals, camera angles, lighting details..."></textarea>
+          </div>
+        </div>
+        <div class="modal-foot">
+          <button type="button" class="btn-secondary" onclick="closeModal('modalEvent')">Cancel</button>
+          <button type="submit" class="btn-create">Save Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 2. Command Palette Modal -->
+  <div class="modal-backdrop" id="modalCmdPalette" onclick="if(event.target===this)closeModal('modalCmdPalette')">
+    <div class="cmd-palette-box">
+      <div class="cmd-input-wrap">
+        <span style="font-size: 1.2rem;">🔍</span>
+        <input type="text" id="cmdSearchInput" class="cmd-input" placeholder="Type a command or jump to page..." oninput="handleCmdSearch()">
+        <span class="kbd-shortcut">ESC</span>
+      </div>
+      <div class="cmd-results" id="cmdResultsList">
+        <div class="cmd-item" onclick="switchPage('dashboard');closeModal('modalCmdPalette')">
+          <span>📊 Go to Dashboard</span>
+          <span class="kbd-shortcut">1</span>
+        </div>
+        <div class="cmd-item" onclick="switchPage('events');closeModal('modalCmdPalette')">
+          <span>📅 Manage Events & Kanban</span>
+          <span class="kbd-shortcut">2</span>
+        </div>
+        <div class="cmd-item" onclick="switchPage('team');closeModal('modalCmdPalette')">
+          <span>👥 View Creators & Portfolios</span>
+          <span class="kbd-shortcut">3</span>
+        </div>
+        <div class="cmd-item" onclick="switchPage('content');closeModal('modalCmdPalette')">
+          <span>📁 Browse Content Library</span>
+          <span class="kbd-shortcut">4</span>
+        </div>
+        <div class="cmd-item" onclick="switchPage('equipment');closeModal('modalCmdPalette')">
+          <span>🎥 Check Equipment Inventory</span>
+          <span class="kbd-shortcut">5</span>
+        </div>
+        <div class="cmd-item" onclick="openEventModal();closeModal('modalCmdPalette')">
+          <span>⚡ Create New Event</span>
+          <span class="kbd-shortcut">E</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ===================================================
+       APPLICATION STATE & CONTROLLERS
+       =================================================== -->
+  <script>
+    // State Store
+    let state = {
+      events: [],
+      team: [],
+      equipment: [],
+      attendance: [],
+      media: [],
+      currentView: 'dashboard',
+      eventViewMode: 'kanban',
+      activeTeamCategory: 'all',
+      activeGearCategory: 'all'
+    };
+
+    // Initialize Portal
+    document.addEventListener('DOMContentLoaded', async () => {
+      initCharts();
+      await fetchAllData();
+      setupKeyboardShortcuts();
+    });
+
+    // Navigation Switcher
+    function switchPage(pageId, navEl) {
+      state.currentView = pageId;
+      document.querySelectorAll('.page-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+      const targetView = document.getElementById('view-' + pageId);
+      if (targetView) targetView.classList.add('active');
+
+      if (navEl) {
+        navEl.classList.add('active');
+      } else {
+        const item = document.querySelector(`.nav-item[onclick*="${pageId}"]`);
+        if (item) item.classList.add('active');
+      }
+
+      document.getElementById('topbarCurrentPage').textContent = pageId.charAt(0).toUpperCase() + pageId.slice(1);
+    }
+
+    // Fetch All Portal Data
+    async function fetchAllData() {
+      try {
+        // 1. Team Data
+        const teamRes = await fetch('/api/team');
+        if (teamRes.ok) {
+          state.team = await teamRes.json();
+          document.getElementById('kpiTeamCount').textContent = state.team.length;
+          document.getElementById('sidebarTeamBadge').textContent = state.team.length;
+          renderTeamGrid();
+        }
+
+        // 2. Events Data
+        try {
+          const evtRes = await fetch('/server/data/events.json');
+          if (evtRes.ok) state.events = await evtRes.json();
+        } catch (e) {
+          state.events = [];
+        }
+        if (!state.events || state.events.length === 0) {
+          state.events = [
+            { id: "evt-1", name: "Meraki 2026 Mega Fest", venue: "Main Auditorium", date: "2026-03-24", status: "live", assignedTeam: ["Prince Kumar", "Anshiv"], tasksCount: 18, completedTasks: 14, coverImage: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800" },
+            { id: "evt-2", name: "TechX Conclave", venue: "Block 3", date: "2026-04-05", status: "planning", assignedTeam: ["Anshul Toppo"], tasksCount: 12, completedTasks: 4, coverImage: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800" }
+          ];
+        }
+        document.getElementById('kpiEventsCount').textContent = state.events.length;
+        document.getElementById('sidebarEventsBadge').textContent = state.events.length;
+        renderEvents();
+
+        // 3. Equipment Data
+        try {
+          const gearRes = await fetch('/server/data/equipment.json');
+          if (gearRes.ok) state.equipment = await gearRes.json();
+        } catch (e) {}
+        if (!state.equipment || state.equipment.length === 0) {
+          state.equipment = [
+            { id: "eq-1", name: "Sony FX3 Cinema Camera", category: "Camera", serialNo: "SN-FX3-8849", status: "In Use", borrower: "Prince Kumar", returnDate: "2026-03-25", image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500" },
+            { id: "eq-2", name: "Sony A7 IV Hybrid", category: "Camera", serialNo: "SN-A74-1029", status: "Available", image: "https://images.unsplash.com/photo-1502982720700-bfff97f2da71?w=500" },
+            { id: "eq-3", name: "DJI RS3 Pro Gimbal", category: "Gimbal", serialNo: "SN-RS3P-5592", status: "In Use", borrower: "Prince Kumar", image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=500" }
+          ];
+        }
+        document.getElementById('sidebarGearBadge').textContent = state.equipment.length;
+        const inUseCount = state.equipment.filter(g => g.status === 'In Use').length;
+        document.getElementById('kpiGearCount').textContent = `${inUseCount} / ${state.equipment.length}`;
+        renderEquipment();
+
+        // 4. Attendance
+        try {
+          const attRes = await fetch('/server/data/attendance.json');
+          if (attRes.ok) state.attendance = await attRes.json();
+        } catch (e) {}
+        renderAttendance();
+
+        // 5. Media Library
+        fetchMediaFiles();
+
+      } catch (err) {
+        console.warn('Data load error:', err);
+      }
+    }
+
+    // Render Events (Kanban & List)
+    function renderEvents() {
+      const planning = state.events.filter(e => e.status === 'planning');
+      const live = state.events.filter(e => e.status === 'live');
+      const completed = state.events.filter(e => e.status === 'completed');
+
+      document.getElementById('countPlanning').textContent = planning.length;
+      document.getElementById('countLive').textContent = live.length;
+      document.getElementById('countCompleted').textContent = completed.length;
+
+      const renderCard = (evt) => `
+        <div class="kanban-card" onclick="editEvent('${evt.id}')">
+          ${evt.coverImage ? `<img src="${evt.coverImage}" class="card-cover" alt="Cover">` : ''}
+          <div class="event-card-title">${evt.name}</div>
+          <div class="event-meta-row">
+            <span>📍 ${evt.venue}</span>
+            <span>• ${evt.date}</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px;">
+            <div class="avatar-stack">
+              ${(evt.assignedTeam || []).map(name => `<div class="mini-avatar" title="${name}">${name.charAt(0)}</div>`).join('')}
+            </div>
+            <span style="font-size: 0.72rem; color: var(--text-dim);">${evt.completedTasks || 0}/${evt.tasksCount || 10} tasks</span>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('colPlanning').innerHTML = planning.map(renderCard).join('') || '<p style="color:var(--text-dim);font-size:0.8rem;text-align:center;padding:1rem;">No events in planning.</p>';
+      document.getElementById('colLive').innerHTML = live.map(renderCard).join('') || '<p style="color:var(--text-dim);font-size:0.8rem;text-align:center;padding:1rem;">No live events right now.</p>';
+      document.getElementById('colCompleted').innerHTML = completed.map(renderCard).join('') || '<p style="color:var(--text-dim);font-size:0.8rem;text-align:center;padding:1rem;">No archived events.</p>';
+
+      // Render Table
+      document.getElementById('eventsTableBody').innerHTML = state.events.map(evt => `
+        <tr>
+          <td><strong style="color:#fff;">${evt.name}</strong></td>
+          <td>${evt.date} ${evt.time ? '<br><small>' + evt.time + '</small>' : ''}</td>
+          <td>${evt.venue}</td>
+          <td>${(evt.assignedTeam || []).join(', ')}</td>
+          <td>
+            <span class="status-badge ${evt.status === 'live' ? 'badge-duty' : evt.status === 'completed' ? 'badge-available' : 'badge-duty'}" style="${evt.status==='planning'?'color:var(--amber);background:rgba(245,158,11,0.1);border-color:rgba(245,158,11,0.2)':''}">
+              ${evt.status.toUpperCase()}
+            </span>
+          </td>
+          <td>
+            <button class="btn-secondary" style="padding:4px 8px;font-size:0.75rem;" onclick="editEvent('${evt.id}')">Edit</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Switch Event View Mode
+    function setEventView(mode) {
+      state.eventViewMode = mode;
+      document.getElementById('btnKanbanView').classList.toggle('active', mode === 'kanban');
+      document.getElementById('btnListView').classList.toggle('active', mode === 'list');
+      document.getElementById('eventsKanbanContainer').style.display = mode === 'kanban' ? 'grid' : 'none';
+      document.getElementById('eventsListContainer').style.display = mode === 'list' ? 'block' : 'none';
+    }
+
+    // Render Team Grid
+    function renderTeamGrid() {
+      const grid = document.getElementById('teamGridContainer');
+      const query = document.getElementById('teamSearchInput') ? document.getElementById('teamSearchInput').value.toLowerCase() : '';
+      
+      const filtered = state.team.filter(m => {
+        const catMatch = state.activeTeamCategory === 'all' || (m.category && m.category.toLowerCase() === state.activeTeamCategory.toLowerCase());
+        const queryMatch = !query || m.name.toLowerCase().includes(query) || (m.role && m.role.toLowerCase().includes(query));
+        return catMatch && queryMatch;
+      });
+
+      grid.innerHTML = filtered.map(m => {
+        const avatar = m.image || m.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800';
+        const banner = m.bannerImage || m.overlayImage || m.image || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800';
+
+        return `
+          <div class="team-card-saas">
+            <div class="team-banner-header" style="background-image: url('${banner}')"></div>
+            <div class="team-avatar-wrap">
+              <img src="${avatar}" class="team-img-circle" alt="${m.name}">
+              <span class="status-badge badge-available">🟢 Available</span>
+            </div>
+            <div class="team-card-body">
+              <div>
+                <div class="team-name-lg">${m.name}</div>
+                <div class="team-dept-pill">${m.role || 'Creator'} • ${m.category || 'General'}</div>
+              </div>
+              <div class="team-skills-row">
+                ${(m.skills || ['Storytelling', 'Cinematography']).slice(0, 3).map(s => `<span class="skill-badge">${s}</span>`).join('')}
+              </div>
+              <div class="team-footer-actions">
+                <a href="/admin/team-portal" class="btn-secondary" style="flex:1;text-align:center;text-decoration:none;font-size:0.8rem;">Full Dossier</a>
+                <a href="/portfolio.html?id=${m.id}" target="_blank" class="btn-secondary" style="font-size:0.8rem;">↗ Portfolio</a>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterTeamCategory(cat, btn) {
+      state.activeTeamCategory = cat;
+      document.querySelectorAll('#teamCategoryPills button').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderTeamGrid();
+    }
+
+    // Render Equipment
+    function renderEquipment() {
+      const grid = document.getElementById('gearGridContainer');
+      const filtered = state.equipment.filter(g => state.activeGearCategory === 'all' || g.category === state.activeGearCategory);
+
+      grid.innerHTML = filtered.map(g => {
+        const isInUse = g.status === 'In Use';
+        return `
+          <div class="gear-card">
+            <div class="gear-top">
+              <div class="gear-img-wrap">
+                <img src="${g.image || 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500'}" alt="${g.name}">
+              </div>
+              <div class="gear-info">
+                <div class="gear-title">${g.name}</div>
+                <div class="gear-serial">${g.serialNo} • ${g.category}</div>
+              </div>
+            </div>
+            <div class="gear-status-row">
+              <span style="color:var(--text-muted);">Status</span>
+              <span class="status-badge ${isInUse ? 'badge-duty' : 'badge-available'}">${g.status}</span>
+            </div>
+            ${isInUse ? `
+              <div style="font-size:0.75rem;color:var(--text-dim);background:rgba(255,255,255,0.03);padding:6px 10px;border-radius:6px;">
+                Borrower: <strong style="color:#fff;">${g.borrower}</strong> (Return by: ${g.returnDate || 'Soon'})
+              </div>
+            ` : ''}
+            <button class="btn-secondary" style="width:100%;font-size:0.8rem;" onclick="toggleGearStatus('${g.id}')">
+              ${isInUse ? 'Check-In Gear' : 'Check-Out Gear'}
+            </button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterGear(cat, btn) {
+      state.activeGearCategory = cat;
+      document.querySelectorAll('#view-equipment .segment-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderEquipment();
+    }
+
+    function toggleGearStatus(gearId) {
+      const gear = state.equipment.find(g => g.id === gearId);
+      if (!gear) return;
+      if (gear.status === 'In Use') {
+        gear.status = 'Available';
+        gear.borrower = null;
+        showToast(`${gear.name} checked in successfully!`);
+      } else {
+        const borrower = prompt("Enter borrower's creator name:", "Prince Kumar");
+        if (borrower) {
+          gear.status = 'In Use';
+          gear.borrower = borrower;
+          showToast(`${gear.name} checked out to ${borrower}!`);
+        }
+      }
+      renderEquipment();
+    }
+
+    // Render Attendance
+    function renderAttendance() {
+      const tbody = document.getElementById('attendanceTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = (state.attendance || []).map(a => `
+        <tr>
+          <td><strong style="color:#fff;">${a.creator}</strong></td>
+          <td>${a.date}</td>
+          <td>${a.checkIn}</td>
+          <td>${a.checkOut || '--'}</td>
+          <td><span class="mono">${a.hours}h</span></td>
+          <td>${a.event}</td>
+          <td><span class="status-badge badge-duty">${a.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // Fetch Media Files for Content Library
+    async function fetchMediaFiles() {
+      const grid = document.getElementById('mediaFilesGrid');
+      const dummyPhotos = [
+        { name: "DSC01903_4K_Stage.jpg", type: "image", size: "14.2 MB", res: "3840 x 2160", url: "/media/DSC01903.jpg" },
+        { name: "Meraki_Aftermovie_v3.mp4", type: "video", size: "380 MB", res: "4K 60fps", url: "videos/digital_3d_logo.mp4" },
+        { name: "Anshiv_Editorial_Cover.jpg", type: "image", size: "8.6 MB", res: "2800 x 3600", url: "/media/DSC01854-2.jpg" },
+        { name: "TechX_Robotics_Reel.mp4", type: "video", size: "140 MB", res: "1080 x 1920", url: "videos/digital_3d_logo.mp4" }
+      ];
+
+      grid.innerHTML = dummyPhotos.map(file => `
+        <div class="media-card-item">
+          <div class="media-thumb-box">
+            ${file.type === 'image' ? `<img src="${file.url}" alt="${file.name}">` : `<div style="font-size:2.5rem;">🎬</div>`}
+          </div>
+          <div class="media-card-details">
+            <div class="media-file-name">${file.name}</div>
+            <div class="media-file-meta">${file.size} • ${file.res}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Chart.js Visual Telemetry
+    function initCharts() {
+      // 1. Weekly Dashboard Hours
+      const ctxWeekly = document.getElementById('dashboardWeeklyChart')?.getContext('2d');
+      if (ctxWeekly) {
+        new Chart(ctxWeekly, {
+          type: 'line',
+          data: {
+            labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+            datasets: [{
+              label: 'Production Hours',
+              data: [14, 22, 18, 28, 35, 48, 30],
+              borderColor: '#6366f1',
+              backgroundColor: 'rgba(99, 102, 241, 0.12)',
+              borderWidth: 3,
+              fill: true,
+              tension: 0.4,
+              pointBackgroundColor: '#8b5cf6',
+              pointRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8' } },
+              y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8' } }
+            }
+          }
+        });
+      }
+
+      // 2. Attendance Rate
+      const ctxAtt = document.getElementById('attendanceRateChart')?.getContext('2d');
+      if (ctxAtt) {
+        new Chart(ctxAtt, {
+          type: 'bar',
+          data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+            datasets: [{
+              label: 'Attendance %',
+              data: [94, 98, 91, 96],
+              backgroundColor: 'rgba(16, 185, 129, 0.6)',
+              borderRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+              y: { max: 100, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8' } }
+            }
+          }
+        });
+      }
+
+      // 3. Analytics Uploads
+      const ctxUploads = document.getElementById('analyticsUploadsChart')?.getContext('2d');
+      if (ctxUploads) {
+        new Chart(ctxUploads, {
+          type: 'bar',
+          data: {
+            labels: ['Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
+            datasets: [{
+              label: 'Uploads',
+              data: [42, 65, 88, 120, 142],
+              backgroundColor: '#6366f1',
+              borderRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+              y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94a3b8' } }
+            }
+          }
+        });
+      }
+
+      // 4. Analytics Gear
+      const ctxGear = document.getElementById('analyticsGearChart')?.getContext('2d');
+      if (ctxGear) {
+        new Chart(ctxGear, {
+          type: 'doughnut',
+          data: {
+            labels: ['Cameras', 'Lenses', 'Gimbals', 'Audio', 'Lighting'],
+            datasets: [{
+              data: [35, 25, 15, 15, 10],
+              backgroundColor: ['#6366f1', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right', labels: { color: '#94a3b8' } } }
+          }
+        });
+      }
+
+      // 5. Analytics Dept
+      const ctxDept = document.getElementById('analyticsDeptChart')?.getContext('2d');
+      if (ctxDept) {
+        new Chart(ctxDept, {
+          type: 'polarArea',
+          data: {
+            labels: ['Photo', 'Video', 'Editing', 'Design', 'Tech'],
+            datasets: [{
+              data: [92, 95, 88, 78, 85],
+              backgroundColor: ['rgba(99,102,241,0.6)', 'rgba(139,92,246,0.6)', 'rgba(16,185,129,0.6)', 'rgba(245,158,11,0.6)', 'rgba(6,182,212,0.6)'],
+              borderWidth: 0
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'right', labels: { color: '#94a3b8' } } }
+          }
+        });
+      }
+    }
+
+    // Modal Control Helpers
+    function openModal(id) {
+      document.getElementById(id).classList.add('open');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('open');
+    }
+
+    // Event Modal
+    function openEventModal() {
+      document.getElementById('formEvent').reset();
+      document.getElementById('eventFormId').value = '';
+      document.getElementById('modalEventTitle').textContent = 'CREATE EVENT';
+      openModal('modalEvent');
+    }
+
+    function editEvent(id) {
+      const evt = state.events.find(e => e.id === id);
+      if (!evt) return;
+      document.getElementById('eventFormId').value = evt.id;
+      document.getElementById('evtName').value = evt.name;
+      document.getElementById('evtVenue').value = evt.venue;
+      document.getElementById('evtDate').value = evt.date;
+      document.getElementById('evtTime').value = evt.time || '';
+      document.getElementById('evtStatus').value = evt.status || 'planning';
+      document.getElementById('evtCrew').value = (evt.assignedTeam || []).join(', ');
+      document.getElementById('evtDesc').value = evt.description || '';
+      document.getElementById('evtCover').value = evt.coverImage || '';
+      document.getElementById('modalEventTitle').textContent = 'EDIT EVENT';
+      openModal('modalEvent');
+    }
+
+    function saveEvent(e) {
+      e.preventDefault();
+      const id = document.getElementById('eventFormId').value || ('evt-' + Date.now());
+      const newEvt = {
+        id: id,
+        name: document.getElementById('evtName').value,
+        venue: document.getElementById('evtVenue').value,
+        date: document.getElementById('evtDate').value,
+        time: document.getElementById('evtTime').value,
+        status: document.getElementById('evtStatus').value,
+        assignedTeam: document.getElementById('evtCrew').value.split(',').map(s => s.trim()).filter(Boolean),
+        description: document.getElementById('evtDesc').value,
+        coverImage: document.getElementById('evtCover').value || 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800',
+        tasksCount: 10,
+        completedTasks: 5
+      };
+
+      const idx = state.events.findIndex(x => x.id === id);
+      if (idx !== -1) state.events[idx] = newEvt;
+      else state.events.unshift(newEvt);
+
+      renderEvents();
+      closeModal('modalEvent');
+      showToast('Event saved successfully!');
+    }
+
+    // Command Palette
+    function openCmdPalette() {
+      openModal('modalCmdPalette');
+      setTimeout(() => document.getElementById('cmdSearchInput').focus(), 50);
+    }
+
+    function setupKeyboardShortcuts() {
+      document.addEventListener('keydown', (e) => {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          openCmdPalette();
+        }
+        if (e.key === 'Escape') {
+          closeModal('modalCmdPalette');
+          closeModal('modalEvent');
+        }
+      });
+    }
+
+    function handleCmdSearch() {
+      const q = document.getElementById('cmdSearchInput').value.toLowerCase().trim();
+      const results = document.getElementById('cmdResultsList');
+      if (!q) {
+        results.innerHTML = `
+          <div class="cmd-item" onclick="switchPage('dashboard');closeModal('modalCmdPalette')"><span>📊 Go to Dashboard</span></div>
+          <div class="cmd-item" onclick="switchPage('events');closeModal('modalCmdPalette')"><span>📅 Manage Events & Kanban</span></div>
+          <div class="cmd-item" onclick="switchPage('team');closeModal('modalCmdPalette')"><span>👥 View Creators</span></div>
+          <div class="cmd-item" onclick="switchPage('content');closeModal('modalCmdPalette')"><span>📁 Content Library</span></div>
+          <div class="cmd-item" onclick="openEventModal();closeModal('modalCmdPalette')"><span>⚡ Create New Event</span></div>
+        `;
+        return;
+      }
+
+      const matches = [];
+      state.events.forEach(ev => {
+        if (ev.name.toLowerCase().includes(q)) matches.push({ label: '📅 Event: ' + ev.name, action: () => { switchPage('events'); editEvent(ev.id); } });
+      });
+      state.team.forEach(m => {
+        if (m.name.toLowerCase().includes(q) || (m.role && m.role.toLowerCase().includes(q))) {
+          matches.push({ label: '👤 Creator: ' + m.name + ' (' + (m.role || '') + ')', action: () => { window.location.href = '/portfolio.html?id=' + m.id; } });
+        }
+      });
+
+      if (matches.length === 0) {
+        results.innerHTML = '<div style="color:var(--text-dim);font-size:0.85rem;padding:1rem;text-align:center;">No matching commands or dossiers.</div>';
+      } else {
+        results.innerHTML = matches.map((m, i) => `
+          <div class="cmd-item" onclick="closeModal('modalCmdPalette');(${m.action.toString()})()">
+            <span>${m.label}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    // Quick Actions
+    function handleQuickCreate() {
+      openEventModal();
+    }
+
+    function openCreatorModal() {
+      window.location.href = '/admin/team-portal';
+    }
+
+    function openAttendanceModal() {
+      const name = prompt("Enter Creator Name to Check-In:", "Prince Kumar");
+      if (name) {
+        state.attendance.unshift({
+          id: "att-" + Date.now(),
+          creator: name,
+          date: new Date().toISOString().split('T')[0],
+          checkIn: "10:00 AM",
+          checkOut: "--",
+          hours: 1.0,
+          event: "Studio Production",
+          status: "On Duty"
+        });
+        renderAttendance();
+        showToast(`${name} checked in on duty!`);
+      }
+    }
+
+    function openGearModal() {
+      const gearName = prompt("Enter Gear Name:", "Sony FX6 Cinema Line");
+      if (gearName) {
+        state.equipment.unshift({
+          id: "eq-" + Date.now(),
+          name: gearName,
+          category: "Camera",
+          serialNo: "SN-" + Math.floor(Math.random()*90000 + 10000),
+          status: "Available",
+          image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500"
+        });
+        renderEquipment();
+        showToast(`${gearName} added to inventory!`);
+      }
+    }
+
+    function exportPortalData() {
+      const exportObj = {
+        timestamp: new Date().toISOString(),
+        team: state.team,
+        events: state.events,
+        equipment: state.equipment,
+        attendance: state.attendance
+      };
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "dsa_media_crew_portal_backup_" + Date.now() + ".json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("Full database backup downloaded!");
+    }
+
+    // Toast Utility
+    function showToast(msg) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast-msg';
+      toast.innerHTML = `<span>⚡</span> <span>${msg}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        toast.style.transition = 'all 0.3s';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+  </script>
+</body>
+</html>

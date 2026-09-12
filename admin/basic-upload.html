@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Upload</title>
+    <style>
+        body { font-family: Arial; background: #1a1a1a; color: white; padding: 20px; }
+        h1 { color: #e63222; }
+        form { margin: 20px 0; }
+        input[type="file"] { margin: 10px 0; }
+        button { background: #e63222; color: white; padding: 10px 20px; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Basic File Upload</h1>
+    <p>Files will be saved to: server/uploads/</p>
+    
+    <form action="/api/upload" method="POST" enctype="multipart/form-data">
+        <label>Title:</label><br>
+        <input type="text" name="title" placeholder="Enter title for this media" required style="width: 300px; padding: 8px; margin: 5px 0;"><br><br>
+        
+        <label>Event:</label><br>
+        <select name="eventName" id="eventSelect" style="width: 300px; padding: 8px; margin: 5px 0;">
+            <option value="">No Event</option>
+        </select>
+        <button type="button" onclick="addNewEvent()" style="margin-left: 10px; background: #444; padding: 8px;">+ New Event</button>
+        <br><br>
+        
+        <label>Description:</label><br>
+        <input type="text" name="description" placeholder="Brief description" style="width: 300px; padding: 8px; margin: 5px 0;"><br><br>
+        
+        <label>Category:</label><br>
+        <select name="category" style="width: 300px; padding: 8px; margin: 5px 0;">
+            <option value="photography">Photography</option>
+            <option value="videography">Videography</option>
+            <option value="cultural">Cultural</option>
+            <option value="sports">Sports</option>
+            <option value="events">Events</option>
+        </select><br><br>
+        
+        <label>Select file:</label><br>
+        <input type="file" name="file" accept="image/*,video/*" required><br><br>
+        <button type="submit">Upload</button>
+    </form>
+    
+    <hr>
+    
+    <h2>Uploaded Files</h2>
+    <button onclick="location.reload()">Refresh</button>
+    <div id="files"></div>
+    
+    <script>
+        // Load events on page load
+        loadEvents();
+        loadFiles();
+
+        function loadEvents() {
+            fetch('/api/events')
+                .then(r => r.json())
+                .then(events => {
+                    const select = document.getElementById('eventSelect');
+                    select.innerHTML = '<option value="">No Event</option>';
+                    events.forEach(event => {
+                        select.innerHTML += `<option value="${event.name}">${event.name}</option>`;
+                    });
+                });
+        }
+
+        function addNewEvent() {
+            const eventName = prompt('Enter new event name:');
+            if (eventName) {
+                const eventDate = prompt('Enter event date (YYYY-MM-DD):', new Date().toISOString().split('T')[0]);
+                const description = prompt('Enter event description:', '');
+                
+                fetch('/api/events', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: eventName,
+                        date: eventDate,
+                        description: description
+                    })
+                })
+                .then(r => r.json())
+                .then(() => {
+                    alert('Event added successfully!');
+                    loadEvents();
+                })
+                .catch(err => alert('Failed to add event: ' + err));
+            }
+        }
+
+        function loadFiles() {
+            fetch('/api/upload/files')
+                .then(r => r.json())
+                .then(data => {
+                    const filesDiv = document.getElementById('files');
+                    if (data.files && data.files.length > 0) {
+                        filesDiv.innerHTML = data.files.map(f => 
+                            `<div style="margin: 10px 0; padding: 10px; background: #2a2a2a;">
+                                <strong>${f.title || f.filename}</strong><br>
+                                ${f.eventName ? `<small style="color: #e63222;">📅 ${f.eventName}</small><br>` : ''}
+                                ${f.category ? `<small>Category: ${f.category}</small><br>` : ''}
+                                ${f.description ? `<small>${f.description}</small><br>` : ''}
+                                <small>${(f.size / 1024).toFixed(1)} KB</small><br>
+                                <img src="${f.url}" style="max-width: 200px; margin-top: 5px;" onerror="this.style.display='none'">
+                                <button onclick="deleteFile('${f.filename}')" style="margin-top: 5px; background: #ef4444;">Delete</button>
+                            </div>`
+                        ).join('');
+                    } else {
+                        filesDiv.innerHTML = '<p>No files uploaded yet</p>';
+                    }
+                });
+        }
+            
+        function deleteFile(filename) {
+            if (confirm('Delete ' + filename + '?')) {
+                fetch('/api/upload/files/' + filename, { method: 'DELETE' })
+                    .then(() => location.reload());
+            }
+        }
+    </script>
+</body>
+</html>

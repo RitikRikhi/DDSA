@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Media Crew — Team & Creator Admin Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #080808;
+      --bg-card: #121212;
+      --bg-card-hover: #181818;
+      --bg-input: #1b1b1b;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-focus: #c8102e;
+      --red: #c8102e;
+      --red-hover: #e01b3c;
+      --red-glow: rgba(200, 16, 46, 0.35);
+      --gold: #b8a06a;
+      --gold-glow: rgba(184, 160, 106, 0.25);
+      --text-white: #f5f0eb;
+      --text-dim: #999999;
+      --text-muted: #666666;
+      --green: #2ecc71;
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(8, 8, 8, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.9rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .brand-logo {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.75rem;
+      letter-spacing: 2px;
+      color: var(--text-white);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .brand-logo span.red { color: var(--red); }
+    .brand-logo span.gold { color: var(--gold); }
+
+    .portal-badge {
+      background: rgba(200, 16, 46, 0.15);
+      border: 1px solid rgba(200, 16, 46, 0.4);
+      color: var(--red);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-dim);
+      padding: 0.55rem 1.1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-white);
+      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-primary {
+      background: var(--red);
+      border: 1px solid var(--red);
+      color: #fff;
+      padding: 0.6rem 1.4rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px var(--red-glow);
+    }
+
+    .btn-primary:hover {
+      background: var(--red-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(200, 16, 46, 0.5);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 2rem 2rem 5rem 2rem;
+    }
+
+    /* Hero Header */
+    .hero-header {
+      margin-bottom: 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2.75rem;
+      letter-spacing: 2px;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-subtitle {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+      max-width: 600px;
+    }
+
+    .stats-row {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .stat-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--radius-md);
+      text-align: center;
+    }
+
+    .stat-pill-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.6rem;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .stat-pill-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Search and Filters */
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1;
+      min-width: 260px;
+      max-width: 400px;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-white);
+      padding: 0.65rem 1rem 0.65rem 2.5rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .search-input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px var(--red-glow);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .category-pills {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .cat-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-dim);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .cat-btn:hover {
+      color: var(--text-white);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .cat-btn.active {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+      box-shadow: 0 2px 10px var(--red-glow);
+    }
+
+    /* Creator Grid */
+    .creators-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .creator-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .creator-card:hover {
+      border-color: rgba(200, 16, 46, 0.5);
+      background: var(--bg-card-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-banner {
+      height: 120px;
+      background: linear-gradient(135deg, #222, #111);
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .card-banner::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--bg-card) 5%, transparent 90%);
+    }
+
+    .card-avatar-wrap {
+      position: relative;
+      margin-top: -50px;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      z-index: 2;
+    }
+
+    .card-avatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      border: 3px solid var(--bg-card);
+      object-fit: cover;
+      background: #1a1a1a;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    }
+
+    .card-badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(184, 160, 106, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(184, 160, 106, 0.3);
+      margin-bottom: 8px;
+    }
+
+    .card-body {
+      padding: 1rem 1.5rem 1.5rem 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card-name {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.6rem;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+    }
+
+    .card-role {
+      color: var(--red);
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.8rem;
+    }
+
+    .card-tagline {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+      font-style: italic;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      padding: 0.8rem;
+      background: rgba(0,0,0,0.35);
+      border-radius: var(--radius-sm);
+      margin-bottom: 1rem;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .card-stat-val {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.2rem;
+      color: var(--text-white);
+    }
+
+    .card-stat-label {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+    }
+
+    .card-actions {
+      margin-top: auto;
+      display: flex;
+      gap: 0.5rem;
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn-card-edit {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-white);
+      padding: 0.55rem 0.8rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      transition: var(--transition);
+    }
+
+    .btn-card-edit:hover {
+      background: var(--red);
+      border-color: var(--red);
+    }
+
+    .btn-card-addwork {
+      background: rgba(184, 160, 106, 0.12);
+      border: 1px solid rgba(184, 160, 106, 0.3);
+      color: var(--gold);
+      padding: 0.55rem 0.8rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: var(--transition);
+    }
+
+    .btn-card-addwork:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    .btn-card-delete {
+      background: rgba(200, 16, 46, 0.08);
+      border: 1px solid rgba(200, 16, 46, 0.2);
+      color: #ff6b81;
+      padding: 0.55rem 0.75rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-card-delete:hover {
+      background: #c8102e;
+      color: #fff;
+    }
+
+    /* Modal Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-dialog {
+      background: #111111;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 900px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+      overflow: hidden;
+      animation: modalIn 0.3s ease;
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.96) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .modal-header {
+      padding: 1.2rem 1.8rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .modal-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.8rem;
+      letter-spacing: 1.5px;
+      color: var(--text-white);
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--red);
+    }
+
+    .modal-tabs {
+      display: flex;
+      background: #0d0d0d;
+      border-bottom: 1px solid var(--border-color);
+      padding: 0 1.8rem;
+      overflow-x: auto;
+    }
+
+    .modal-tab-btn {
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-dim);
+      padding: 0.85rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .modal-tab-btn:hover {
+      color: var(--text-white);
+    }
+
+    .modal-tab-btn.active {
+      color: var(--red);
+      border-bottom-color: var(--red);
+    }
+
+    .modal-body {
+      padding: 1.8rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.2rem;
+    }
+
+    .form-group-full {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--gold);
+      margin-bottom: 0.4rem;
+    }
+
+    .form-control {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      color: var(--text-white);
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      outline: none;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px var(--red-glow);
+    }
+
+    textarea.form-control {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    /* Visual Previews in Modal */
+    .visual-preview-box {
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      background: rgba(0,0,0,0.3);
+      margin-top: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .banner-preview-img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: var(--radius-sm);
+      background: #222;
+    }
+
+    .avatar-preview-img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid var(--red);
+      background: #222;
+    }
+
+    .file-input-wrap {
+      margin-top: 0.6rem;
+      width: 100%;
+    }
+
+    /* Proof of works tab items */
+    .pow-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .pow-title {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.4rem;
+      letter-spacing: 1px;
+    }
+
+    .pow-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .pow-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .pow-card img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .pow-card-info {
+      padding: 0.6rem 0.8rem;
+    }
+
+    .pow-card-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pow-card-meta {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    .pow-card-delete {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(200, 16, 46, 0.85);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      transition: var(--transition);
+    }
+
+    .pow-card-delete:hover {
+      background: var(--red);
+      transform: scale(1.1);
+    }
+
+    .modal-footer {
+      padding: 1.2rem 1.8rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #181818;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--red);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-sm);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 300;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success { border-left-color: var(--green); }
+    .toast.error { border-left-color: var(--red); }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--bg-card);
+      border: 1px dashed var(--border-color);
+      border-radius: var(--radius-lg);
+      grid-column: 1 / -1;
+    }
+
+    .empty-state h3 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-dim);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .topbar { padding: 0.8rem 1rem; }
+      .container { padding: 1.5rem 1rem; }
+      .creators-grid { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="topbar">
+    <div class="brand-group">
+      <a href="/admin/dashboard.html" class="brand-logo">
+        <span class="red">DSA</span><span class="gold">·</span>MEDIA CREW
+      </a>
+      <span class="portal-badge">Team & Creator Portal</span>
+    </div>
+    <div class="topbar-actions">
+      <a href="/admin/dashboard.html" class="nav-btn">← Admin Dashboard</a>
+      <a href="/team.html" target="_blank" class="nav-btn">View Live Page ↗</a>
+      <button class="btn-primary" onclick="openCreateModal()">
+        <span>+</span> Add Creator
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Portal Container -->
+  <main class="container">
+    
+    <!-- Hero Header -->
+    <div class="hero-header">
+      <div>
+        <h1 class="hero-title">CREATORS DIRECTORY</h1>
+        <p class="hero-subtitle">
+          Manage creator dossiers, update front avatars, cover banners, and upload proof of work videos & photography for each team member.
+        </p>
+      </div>
+      <div class="stats-row">
+        <div class="stat-pill">
+          <div class="stat-pill-num" id="totalCreatorsCount">0</div>
+          <div class="stat-pill-label">Total Creators</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-pill-num" id="totalWorksCount">0</div>
+          <div class="stat-pill-label">Proof of Works</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter & Search Controls -->
+    <div class="filter-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="creatorSearch" class="search-input" placeholder="Search creators by name, role, or skill..." oninput="handleSearch()">
+      </div>
+      <div class="category-pills">
+        <button class="cat-btn active" onclick="filterCategory('all', this)">ALL</button>
+        <button class="cat-btn" onclick="filterCategory('leader', this)">LEADERSHIP</button>
+        <button class="cat-btn" onclick="filterCategory('photography', this)">PHOTOGRAPHY</button>
+        <button class="cat-btn" onclick="filterCategory('videography', this)">VIDEOGRAPHY</button>
+        <button class="cat-btn" onclick="filterCategory('design', this)">DESIGN</button>
+        <button class="cat-btn" onclick="filterCategory('editing', this)">EDITING</button>
+        <button class="cat-btn" onclick="filterCategory('content', this)">CONTENT</button>
+        <button class="cat-btn" onclick="filterCategory('tech', this)">TECH</button>
+      </div>
+    </div>
+
+    <!-- Creators Grid -->
+    <div class="creators-grid" id="creatorsGrid">
+      <div style="grid-column: 1/-1; text-align: center; padding: 3rem;">
+        <p style="color: var(--text-dim);">Loading creators directory...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Creator Edit / Create Modal -->
+  <div class="modal-overlay" id="creatorModal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTitle">EDIT CREATOR DOSSIER</h2>
+        <button class="modal-close" onclick="closeModal('creatorModal')">&times;</button>
+      </div>
+
+      <!-- Modal Tabs -->
+      <div class="modal-tabs">
+        <button class="modal-tab-btn active" onclick="switchTab('tabVisuals', this)">1. Visuals & Banners</button>
+        <button class="modal-tab-btn" onclick="switchTab('tabIdentity', this)">2. Identity & Role</button>
+        <button class="modal-tab-btn" onclick="switchTab('tabBioDna', this)">3. Bio, Skills & DNA</button>
+        <button class="modal-tab-btn" onclick="switchTab('tabSocials', this)">4. Social Links</button>
+        <button class="modal-tab-btn" onclick="switchTab('tabPortfolio', this)">5. Proof of Works</button>
+      </div>
+
+      <!-- Modal Body -->
+      <form id="creatorForm" onsubmit="handleSaveCreator(event)">
+        <input type="hidden" id="creatorId" name="id">
+
+        <div class="modal-body">
+          
+          <!-- TAB 1: VISUALS & BANNERS -->
+          <div class="tab-content active" id="tabVisuals">
+            <div class="form-grid">
+              
+              <!-- Front Profile Avatar -->
+              <div>
+                <label class="form-label">Front Profile Image (Avatar)</label>
+                <div class="visual-preview-box">
+                  <img id="avatarPreview" class="avatar-preview-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face" alt="Avatar">
+                  <div class="file-input-wrap">
+                    <input type="file" id="avatarFileInput" name="image" class="form-control" accept="image/*" onchange="previewFile(this, 'avatarPreview')">
+                  </div>
+                </div>
+                <div style="margin-top: 0.5rem;">
+                  <label class="form-label" style="font-size: 0.7rem;">Or Image URL</label>
+                  <input type="text" id="avatarUrlInput" name="image" class="form-control" placeholder="https://... or /media/DSC01903.jpg" oninput="previewUrl(this.value, 'avatarPreview')">
+                </div>
+              </div>
+
+              <!-- Banner / Cover Overlay Image -->
+              <div>
+                <label class="form-label">Banner Image (Cover / Overlay)</label>
+                <div class="visual-preview-box">
+                  <img id="bannerPreview" class="banner-preview-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800" alt="Banner">
+                  <div class="file-input-wrap">
+                    <input type="file" id="bannerFileInput" name="bannerImage" class="form-control" accept="image/*" onchange="previewFile(this, 'bannerPreview')">
+                  </div>
+                </div>
+                <div style="margin-top: 0.5rem;">
+                  <label class="form-label" style="font-size: 0.7rem;">Or Banner URL</label>
+                  <input type="text" id="bannerUrlInput" name="bannerImage" class="form-control" placeholder="https://... or /media/banner.jpg" oninput="previewUrl(this.value, 'bannerPreview')">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TAB 2: IDENTITY & ROLE -->
+          <div class="tab-content" id="tabIdentity">
+            <div class="form-grid">
+              <div>
+                <label class="form-label">Creator Full Name *</label>
+                <input type="text" id="creatorName" name="name" class="form-control" placeholder="e.g. Prince Kumar" required>
+              </div>
+
+              <div>
+                <label class="form-label">Primary Role / Title *</label>
+                <input type="text" id="creatorRole" name="role" class="form-control" placeholder="e.g. Lead Cinematographer" required>
+              </div>
+
+              <div>
+                <label class="form-label">Category</label>
+                <select id="creatorCategory" name="category" class="form-control">
+                  <option value="leader">Leadership</option>
+                  <option value="photography">Photography</option>
+                  <option value="videography">Videography</option>
+                  <option value="design">Graphic Design</option>
+                  <option value="editing">Video Editing & VFX</option>
+                  <option value="content">Content & Scripting</option>
+                  <option value="tech">Tech & Operations</option>
+                  <option value="vlogging">Vlogging & Reel</option>
+                  <option value="onscreen">On-Screen Host</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="form-label">Tagline (Short Motto)</label>
+                <input type="text" id="creatorTagline" name="tagline" class="form-control" placeholder="e.g. Turning fleeting moments into timeless cinema.">
+              </div>
+
+              <div class="form-group-full">
+                <label class="form-label">Specialty Badges (Uppercase)</label>
+                <input type="text" id="creatorSpecialty" name="specialty" class="form-control" placeholder="e.g. MOTION / CINEMATOGRAPHY / CREATIVE DIRECTION">
+              </div>
+
+              <div>
+                <label class="form-label">Official Email</label>
+                <input type="email" id="creatorEmail" name="email" class="form-control" placeholder="creator@dsamediacrew.com">
+              </div>
+
+              <div>
+                <label class="form-label">Phone / Contact</label>
+                <input type="text" id="creatorPhone" name="phone" class="form-control" placeholder="+91 98765 43210">
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: BIO, SKILLS & DNA -->
+          <div class="tab-content" id="tabBioDna">
+            <div class="form-grid">
+              <div class="form-group-full">
+                <label class="form-label">Creator Biography</label>
+                <textarea id="creatorBio" name="bio" class="form-control" placeholder="Detailed story of the creator, their background, artistic style, and contributions..."></textarea>
+              </div>
+
+              <div class="form-group-full">
+                <label class="form-label">Skills (Comma-separated)</label>
+                <input type="text" id="creatorSkills" name="skills" class="form-control" placeholder="Cinematography, Color Grading, Storyboarding, Gimbal Operations">
+              </div>
+
+              <div class="form-group-full">
+                <label class="form-label">Production Credits & Fests (Comma-separated)</label>
+                <input type="text" id="creatorCredits" name="credits" class="form-control" placeholder="Meraki 2026, Annual Fest 2025, Freshers Mega-Reel">
+              </div>
+
+              <div>
+                <label class="form-label">Storytelling DNA (%)</label>
+                <input type="number" id="dnaStory" class="form-control" min="50" max="100" value="92">
+              </div>
+              <div>
+                <label class="form-label">Cinematography DNA (%)</label>
+                <input type="number" id="dnaCinema" class="form-control" min="50" max="100" value="95">
+              </div>
+              <div>
+                <label class="form-label">Editing & VFX DNA (%)</label>
+                <input type="number" id="dnaEditing" class="form-control" min="50" max="100" value="90">
+              </div>
+              <div>
+                <label class="form-label">Creativity DNA (%)</label>
+                <input type="number" id="dnaCreative" class="form-control" min="50" max="100" value="94">
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: SOCIAL LINKS -->
+          <div class="tab-content" id="tabSocials">
+            <div class="form-grid">
+              <div>
+                <label class="form-label">Instagram Profile URL</label>
+                <input type="url" id="socialInstagram" class="form-control" placeholder="https://instagram.com/username">
+              </div>
+              <div>
+                <label class="form-label">LinkedIn Profile URL</label>
+                <input type="url" id="socialLinkedin" class="form-control" placeholder="https://linkedin.com/in/username">
+              </div>
+              <div>
+                <label class="form-label">YouTube Channel URL</label>
+                <input type="url" id="socialYoutube" class="form-control" placeholder="https://youtube.com/@channel">
+              </div>
+              <div>
+                <label class="form-label">Behance Portfolio URL</label>
+                <input type="url" id="socialBehance" class="form-control" placeholder="https://behance.net/username">
+              </div>
+              <div>
+                <label class="form-label">GitHub URL</label>
+                <input type="url" id="socialGithub" class="form-control" placeholder="https://github.com/username">
+              </div>
+              <div>
+                <label class="form-label">Personal Website / Portfolio</label>
+                <input type="url" id="socialPortfolio" class="form-control" placeholder="https://myportfolio.com">
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: PROOF OF WORKS -->
+          <div class="tab-content" id="tabPortfolio">
+            
+            <!-- Photos Section -->
+            <div class="pow-header">
+              <div class="pow-title">📸 PROOF OF WORK PHOTOS</div>
+              <button type="button" class="btn-card-addwork" onclick="openQuickPowModal('photo')">+ Add Photo Work</button>
+            </div>
+            <div class="pow-cards-grid" id="modalPowPhotosGrid">
+              <p style="color: var(--text-muted); font-size: 0.85rem;">No photos attached yet.</p>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
+
+            <!-- Videos Section -->
+            <div class="pow-header">
+              <div class="pow-title">🎬 PROOF OF WORK VIDEOS & AFTERMOVIES</div>
+              <button type="button" class="btn-card-addwork" onclick="openQuickPowModal('video')">+ Add Video Work</button>
+            </div>
+            <div class="pow-cards-grid" id="modalPowVideosGrid">
+              <p style="color: var(--text-muted); font-size: 0.85rem;">No video reels attached yet.</p>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="nav-btn" onclick="closeModal('creatorModal')">Cancel</button>
+          <button type="submit" class="btn-primary" id="saveCreatorBtn">Save Creator Dossier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Quick Proof of Work Add Modal -->
+  <div class="modal-overlay" id="quickPowModal">
+    <div class="modal-dialog" style="max-width: 550px;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="powModalTitle">ADD PROOF OF WORK</h2>
+        <button class="modal-close" onclick="closeModal('quickPowModal')">&times;</button>
+      </div>
+      <form id="quickPowForm" onsubmit="handleSaveQuickPow(event)">
+        <input type="hidden" id="powCreatorId">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group-full">
+              <label class="form-label">Work Type</label>
+              <select id="powWorkType" class="form-control" onchange="togglePowFields(this.value)">
+                <option value="photo">Photo / Stills</option>
+                <option value="video">Video / Aftermovie Reel</option>
+                <option value="artwork">Graphic Artwork / Poster</option>
+              </select>
+            </div>
+
+            <div class="form-group-full">
+              <label class="form-label" id="powProjectLabel">Project / Event Name *</label>
+              <input type="text" id="powEventName" class="form-control" placeholder="e.g. Annual Fest 2025 Aftermovie" required>
+            </div>
+
+            <div class="form-group-full" id="powMediaFileGroup">
+              <label class="form-label" id="powMediaFileLabel">Upload Media File</label>
+              <input type="file" id="powFileInput" class="form-control">
+            </div>
+
+            <div class="form-group-full">
+              <label class="form-label" id="powMediaUrlLabel">Or Direct Media URL</label>
+              <input type="text" id="powUrlInput" class="form-control" placeholder="https://... or videos/sample.mp4">
+            </div>
+
+            <div class="form-group-full" id="powThumbGroup" style="display: none;">
+              <label class="form-label">Video Thumbnail (Image URL or File)</label>
+              <input type="file" id="powThumbFileInput" class="form-control" accept="image/*">
+              <input type="text" id="powThumbUrlInput" class="form-control" placeholder="https://... image thumbnail" style="margin-top: 4px;">
+            </div>
+
+            <div>
+              <label class="form-label">Creator's Role in this Work</label>
+              <input type="text" id="powRole" class="form-control" placeholder="e.g. Lead Cinematographer">
+            </div>
+
+            <div>
+              <label class="form-label">Date / Year</label>
+              <input type="text" id="powDateYear" class="form-control" placeholder="e.g. 2025-03-15 or 2025">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="nav-btn" onclick="closeModal('quickPowModal')">Cancel</button>
+          <button type="submit" class="btn-primary" id="powSubmitBtn">Attach Work</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toastNotification">
+    <span id="toastIcon">✓</span>
+    <span id="toastMessage">Action completed successfully!</span>
+  </div>
+
+  <!-- Client-Side JavaScript Logic -->
+  <script>
+    let allCreators = [];
+    let currentFiltered = [];
+    let activeCategory = 'all';
+    let editingCreator = null;
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchCreators();
+    });
+
+    // Toast utility
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toastNotification');
+      const toastMsg = document.getElementById('toastMessage');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toast.className = 'toast ' + type;
+      toastMsg.textContent = message;
+      toastIcon.textContent = type === 'success' ? '✓' : '⚠️';
+      toast.classList.add('show');
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+    }
+
+    // Fetch creators from API
+    async function fetchCreators() {
+      try {
+        const res = await fetch('/api/team');
+        allCreators = await res.json();
+        updateStats();
+        applyFilters();
+      } catch (err) {
+        console.error('Error fetching team:', err);
+        showToast('Failed to load creators list', 'error');
+      }
+    }
+
+    // Update Stats
+    function updateStats() {
+      document.getElementById('totalCreatorsCount').textContent = allCreators.length;
+      let totalWorks = 0;
+      allCreators.forEach(c => {
+        if (c.portfolio) {
+          if (c.portfolio.photos) totalWorks += c.portfolio.photos.length;
+          if (c.portfolio.videos) totalWorks += c.portfolio.videos.length;
+        }
+        if (c.artwork) totalWorks += c.artwork.length;
+      });
+      document.getElementById('totalWorksCount').textContent = totalWorks;
+    }
+
+    // Filter by Category
+    function filterCategory(cat, btn) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      applyFilters();
+    }
+
+    // Search filter
+    function handleSearch() {
+      applyFilters();
+    }
+
+    // Apply filters
+    function applyFilters() {
+      const query = document.getElementById('creatorSearch').value.toLowerCase().trim();
+      currentFiltered = allCreators.filter(c => {
+        const matchesCat = activeCategory === 'all' || 
+          (activeCategory === 'leader' && (c.category === 'leader' || (c.role && c.role.toLowerCase().includes('president')))) ||
+          (c.category && c.category.toLowerCase() === activeCategory.toLowerCase());
+
+        const matchesQuery = !query || 
+          (c.name && c.name.toLowerCase().includes(query)) ||
+          (c.role && c.role.toLowerCase().includes(query)) ||
+          (c.skills && c.skills.some(s => s.toLowerCase().includes(query)));
+
+        return matchesCat && matchesQuery;
+      });
+
+      renderCreatorsGrid();
+    }
+
+    // Render Creators Grid
+    function renderCreatorsGrid() {
+      const grid = document.getElementById('creatorsGrid');
+      if (currentFiltered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <h3>NO CREATORS FOUND</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Try adjusting your search terms or add a new creator dossier.</p>
+            <button class="btn-primary" onclick="openCreateModal()">+ Add New Creator</button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = currentFiltered.map(creator => {
+        const photoCount = (creator.portfolio && creator.portfolio.photos) ? creator.portfolio.photos.length : 0;
+        const videoCount = (creator.portfolio && creator.portfolio.videos) ? creator.portfolio.videos.length : 0;
+        const artCount = creator.artwork ? creator.artwork.length : 0;
+        const avatar = creator.image || creator.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face';
+        const banner = creator.bannerImage || creator.overlayImage || creator.image || '';
+
+        return `
+          <div class="creator-card" id="card-${creator.id}">
+            <div class="card-banner" style="background-image: url('${banner}')"></div>
+            <div class="card-avatar-wrap">
+              <img src="${avatar}" alt="${creator.name}" class="card-avatar" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face'">
+              <span class="card-badge">${creator.category || 'CREATOR'}</span>
+            </div>
+            <div class="card-body">
+              <h3 class="card-name">${creator.name}</h3>
+              <div class="card-role">${creator.role || 'Media Specialist'}</div>
+              <p class="card-tagline">"${creator.tagline || creator.specialty || creator.bio || 'Capturing the unseen pulse of DSA Media Crew.'}"</p>
+              
+              <div class="card-stats">
+                <div>
+                  <div class="card-stat-val">${photoCount}</div>
+                  <div class="card-stat-label">Photos</div>
+                </div>
+                <div>
+                  <div class="card-stat-val">${videoCount}</div>
+                  <div class="card-stat-label">Videos</div>
+                </div>
+                <div>
+                  <div class="card-stat-val">${artCount}</div>
+                  <div class="card-stat-label">Artworks</div>
+                </div>
+              </div>
+
+              <div class="card-actions">
+                <button class="btn-card-edit" onclick="openEditModal('${creator.id}')">
+                  ✏️ Edit Profile & Visuals
+                </button>
+                <button class="btn-card-addwork" onclick="openDirectPowModal('${creator.id}')" title="Attach Proof of Work">
+                  + Work
+                </button>
+                <button class="btn-card-delete" onclick="handleDeleteCreator('${creator.id}')" title="Delete Creator">
+                  🗑
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Modal Control Helpers
+    function openModal(id) {
+      document.getElementById(id).classList.add('active');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.remove('active');
+    }
+
+    // Switch Tabs in Modal
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+
+    // Open Create Modal
+    function openCreateModal() {
+      editingCreator = null;
+      document.getElementById('modalTitle').textContent = 'ADD NEW CREATOR DOSSIER';
+      document.getElementById('creatorForm').reset();
+      document.getElementById('creatorId').value = '';
+      document.getElementById('avatarPreview').src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face';
+      document.getElementById('bannerPreview').src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800';
+      document.getElementById('modalPowPhotosGrid').innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">Save creator first to manage proof of works.</p>';
+      document.getElementById('modalPowVideosGrid').innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">Save creator first to manage proof of works.</p>';
+      
+      switchTab('tabVisuals', document.querySelector('.modal-tab-btn'));
+      openModal('creatorModal');
+    }
+
+    // Open Edit Modal
+    function openEditModal(creatorId) {
+      const creator = allCreators.find(c => c.id === creatorId || c._id === creatorId);
+      if (!creator) return;
+      editingCreator = creator;
+
+      document.getElementById('modalTitle').textContent = `EDIT: ${creator.name.toUpperCase()}`;
+      document.getElementById('creatorId').value = creator.id || creator._id;
+      document.getElementById('creatorName').value = creator.name || '';
+      document.getElementById('creatorRole').value = creator.role || '';
+      document.getElementById('creatorCategory').value = (creator.category || 'photography').toLowerCase();
+      document.getElementById('creatorTagline').value = creator.tagline || '';
+      document.getElementById('creatorSpecialty').value = creator.specialty || '';
+      document.getElementById('creatorEmail').value = creator.email || '';
+      document.getElementById('creatorPhone').value = creator.phone || '';
+      document.getElementById('creatorBio').value = creator.bio || '';
+      document.getElementById('creatorSkills').value = (creator.skills || []).join(', ');
+      document.getElementById('creatorCredits').value = (creator.credits || []).join(', ');
+
+      // Visuals
+      const avatar = creator.image || creator.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face';
+      const banner = creator.bannerImage || creator.overlayImage || creator.image || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800';
+      document.getElementById('avatarPreview').src = avatar;
+      document.getElementById('bannerPreview').src = banner;
+      document.getElementById('avatarUrlInput').value = creator.image || '';
+      document.getElementById('bannerUrlInput').value = creator.bannerImage || '';
+
+      // DNA
+      if (creator.mediaDNA) {
+        document.getElementById('dnaStory').value = creator.mediaDNA.storytelling || 92;
+        document.getElementById('dnaCinema').value = creator.mediaDNA.cinematography || 95;
+        document.getElementById('dnaEditing').value = creator.mediaDNA.editing || 90;
+        document.getElementById('dnaCreative').value = creator.mediaDNA.creativity || 94;
+      }
+
+      // Socials
+      const socials = creator.socials || creator.socialLinks || {};
+      document.getElementById('socialInstagram').value = socials.instagram || '';
+      document.getElementById('socialLinkedin').value = socials.linkedin || '';
+      document.getElementById('socialYoutube').value = socials.youtube || '';
+      document.getElementById('socialBehance').value = socials.behance || '';
+      document.getElementById('socialGithub').value = socials.github || '';
+      document.getElementById('socialPortfolio').value = socials.portfolio || '';
+
+      // Render Proof of works inside modal
+      renderModalPow(creator);
+
+      switchTab('tabVisuals', document.querySelector('.modal-tab-btn'));
+      openModal('creatorModal');
+    }
+
+    // Render Proof of Works inside edit modal
+    function renderModalPow(creator) {
+      const photosGrid = document.getElementById('modalPowPhotosGrid');
+      const videosGrid = document.getElementById('modalPowVideosGrid');
+
+      if (creator.portfolio && creator.portfolio.photos && creator.portfolio.photos.length > 0) {
+        photosGrid.innerHTML = creator.portfolio.photos.map((photo, index) => `
+          <div class="pow-card">
+            <img src="${photo.url}" alt="${photo.event}">
+            <button class="pow-card-delete" onclick="handleDeletePow('${creator.id}', 'photo', ${index})">✕</button>
+            <div class="pow-card-info">
+              <div class="pow-card-name">${photo.event}</div>
+              <div class="pow-card-meta">${photo.date || 'Event'} • ${photo.role || 'Photo'}</div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        photosGrid.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">No photos attached yet.</p>';
+      }
+
+      if (creator.portfolio && creator.portfolio.videos && creator.portfolio.videos.length > 0) {
+        videosGrid.innerHTML = creator.portfolio.videos.map((vid, index) => `
+          <div class="pow-card">
+            <img src="${vid.thumbnail || 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800'}" alt="${vid.project}">
+            <button class="pow-card-delete" onclick="handleDeletePow('${creator.id}', 'video', ${index})">✕</button>
+            <div class="pow-card-info">
+              <div class="pow-card-name">${vid.project}</div>
+              <div class="pow-card-meta">${vid.event || ''} ${vid.year || ''} • ${vid.role || 'Video'}</div>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        videosGrid.innerHTML = '<p style="color: var(--text-muted); font-size: 0.85rem;">No video reels attached yet.</p>';
+      }
+    }
+
+    // Live preview helpers
+    function previewFile(input, targetImgId) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          document.getElementById(targetImgId).src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function previewUrl(url, targetImgId) {
+      if (url && url.trim().length > 3) {
+        document.getElementById(targetImgId).src = url.trim();
+      }
+    }
+
+    // Save Creator Handler
+    async function handleSaveCreator(e) {
+      e.preventDefault();
+      const saveBtn = document.getElementById('saveCreatorBtn');
+      const originalText = saveBtn.textContent;
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Saving Dossier...';
+
+      const creatorId = document.getElementById('creatorId').value;
+      const isEdit = !!creatorId;
+
+      const formData = new FormData();
+      formData.append('name', document.getElementById('creatorName').value);
+      formData.append('role', document.getElementById('creatorRole').value);
+      formData.append('category', document.getElementById('creatorCategory').value);
+      formData.append('tagline', document.getElementById('creatorTagline').value);
+      formData.append('specialty', document.getElementById('creatorSpecialty').value);
+      formData.append('email', document.getElementById('creatorEmail').value);
+      formData.append('phone', document.getElementById('creatorPhone').value);
+      formData.append('bio', document.getElementById('creatorBio').value);
+      formData.append('skills', document.getElementById('creatorSkills').value);
+      formData.append('credits', document.getElementById('creatorCredits').value);
+
+      // Socials JSON
+      const socials = {
+        instagram: document.getElementById('socialInstagram').value,
+        linkedin: document.getElementById('socialLinkedin').value,
+        youtube: document.getElementById('socialYoutube').value,
+        behance: document.getElementById('socialBehance').value,
+        github: document.getElementById('socialGithub').value,
+        portfolio: document.getElementById('socialPortfolio').value
+      };
+      formData.append('socials', JSON.stringify(socials));
+
+      // Media DNA JSON
+      const mediaDNA = {
+        storytelling: parseInt(document.getElementById('dnaStory').value) || 90,
+        cinematography: parseInt(document.getElementById('dnaCinema').value) || 90,
+        editing: parseInt(document.getElementById('dnaEditing').value) || 90,
+        creativity: parseInt(document.getElementById('dnaCreative').value) || 90,
+        leadership: 92
+      };
+      formData.append('mediaDNA', JSON.stringify(mediaDNA));
+
+      // File or URL visual inputs
+      const avatarFile = document.getElementById('avatarFileInput').files[0];
+      if (avatarFile) formData.append('image', avatarFile);
+      else if (document.getElementById('avatarUrlInput').value) formData.append('image', document.getElementById('avatarUrlInput').value);
+
+      const bannerFile = document.getElementById('bannerFileInput').files[0];
+      if (bannerFile) formData.append('bannerImage', bannerFile);
+      else if (document.getElementById('bannerUrlInput').value) formData.append('bannerImage', document.getElementById('bannerUrlInput').value);
+
+      try {
+        const url = isEdit ? `/api/team/${creatorId}` : '/api/team';
+        const method = isEdit ? 'PUT' : 'POST';
+
+        const res = await fetch(url, {
+          method: method,
+          body: formData
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          showToast(isEdit ? 'Creator updated successfully!' : 'New creator added to directory!', 'success');
+          closeModal('creatorModal');
+          fetchCreators();
+        } else {
+          showToast(data.message || 'Failed to save creator', 'error');
+        }
+      } catch (err) {
+        showToast('Network error saving creator: ' + err.message, 'error');
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = originalText;
+      }
+    }
+
+    // Delete Creator Handler
+    async function handleDeleteCreator(creatorId) {
+      const creator = allCreators.find(c => c.id === creatorId || c._id === creatorId);
+      const name = creator ? creator.name : 'this creator';
+      if (!confirm(`Are you sure you want to remove ${name} from the DSA Media Crew directory?`)) return;
+
+      try {
+        const res = await fetch(`/api/team/${creatorId}`, { method: 'DELETE' });
+        if (res.ok) {
+          showToast(`${name} removed successfully`, 'success');
+          fetchCreators();
+        } else {
+          showToast('Failed to delete creator', 'error');
+        }
+      } catch (err) {
+        showToast('Error deleting creator: ' + err.message, 'error');
+      }
+    }
+
+    // Delete Proof of Work Handler
+    async function handleDeletePow(creatorId, type, index) {
+      if (!confirm('Remove this proof of work item?')) return;
+      try {
+        const res = await fetch(`/api/team/${creatorId}/proof-of-work/${type}/${index}`, { method: 'DELETE' });
+        if (res.ok) {
+          showToast('Proof of work removed', 'success');
+          await fetchCreators();
+          const updated = allCreators.find(c => c.id === creatorId || c._id === creatorId);
+          if (updated) renderModalPow(updated);
+        } else {
+          showToast('Failed to remove item', 'error');
+        }
+      } catch (err) {
+        showToast('Error: ' + err.message, 'error');
+      }
+    }
+
+    // Quick Proof of Work Modal Control
+    function openDirectPowModal(creatorId) {
+      document.getElementById('powCreatorId').value = creatorId;
+      document.getElementById('quickPowForm').reset();
+      togglePowFields('photo');
+      openModal('quickPowModal');
+    }
+
+    function openQuickPowModal(type) {
+      const creatorId = document.getElementById('creatorId').value;
+      if (!creatorId) {
+        showToast('Please save the creator first', 'error');
+        return;
+      }
+      document.getElementById('powCreatorId').value = creatorId;
+      document.getElementById('quickPowForm').reset();
+      document.getElementById('powWorkType').value = type;
+      togglePowFields(type);
+      openModal('quickPowModal');
+    }
+
+    function togglePowFields(type) {
+      const thumbGroup = document.getElementById('powThumbGroup');
+      const mediaLabel = document.getElementById('powMediaFileLabel');
+      const urlLabel = document.getElementById('powMediaUrlLabel');
+
+      if (type === 'video') {
+        thumbGroup.style.display = 'block';
+        mediaLabel.textContent = 'Upload Video File (MP4/WebM)';
+        urlLabel.textContent = 'Or Direct Video URL (MP4, YouTube, Vimeo)';
+      } else {
+        thumbGroup.style.display = 'none';
+        mediaLabel.textContent = 'Upload Image File';
+        urlLabel.textContent = 'Or Direct Image URL';
+      }
+    }
+
+    // Save Quick Proof of Work Handler
+    async function handleSaveQuickPow(e) {
+      e.preventDefault();
+      const creatorId = document.getElementById('powCreatorId').value;
+      const workType = document.getElementById('powWorkType').value;
+      const submitBtn = document.getElementById('powSubmitBtn');
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Attaching...';
+
+      const formData = new FormData();
+      formData.append('workType', workType);
+      formData.append('project', document.getElementById('powEventName').value);
+      formData.append('event', document.getElementById('powEventName').value);
+      formData.append('role', document.getElementById('powRole').value);
+      formData.append('date', document.getElementById('powDateYear').value);
+      formData.append('year', document.getElementById('powDateYear').value);
+
+      const mediaFile = document.getElementById('powFileInput').files[0];
+      if (mediaFile) formData.append('photoFile', mediaFile);
+      else if (document.getElementById('powUrlInput').value) formData.append('url', document.getElementById('powUrlInput').value);
+
+      if (workType === 'video') {
+        const thumbFile = document.getElementById('powThumbFileInput').files[0];
+        if (thumbFile) formData.append('thumbnailFile', thumbFile);
+        else if (document.getElementById('powThumbUrlInput').value) formData.append('thumbnail', document.getElementById('powThumbUrlInput').value);
+      }
+
+      try {
+        const res = await fetch(`/api/team/${creatorId}/proof-of-work`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (res.ok) {
+          showToast('Proof of work attached!', 'success');
+          closeModal('quickPowModal');
+          await fetchCreators();
+          const updated = allCreators.find(c => c.id === creatorId || c._id === creatorId);
+          if (updated && document.getElementById('creatorModal').classList.contains('active')) {
+            renderModalPow(updated);
+          }
+        } else {
+          const err = await res.json();
+          showToast(err.message || 'Failed to attach work', 'error');
+        }
+      } catch (err) {
+        showToast('Error attaching work: ' + err.message, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Attach Work';
+      }
+    }
+  </script>
+</body>
+</html>

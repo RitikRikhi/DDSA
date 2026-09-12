@@ -384,15 +384,35 @@ section {
 
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 25px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
 }
 
 .gallery-item {
   position: relative;
-  border-radius: 15px;
+  border-radius: 12px;
   overflow: hidden;
-  aspect-ratio: 4/3;
+  aspect-ratio: 1;
+  background: var(--grey);
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  height: 100%;
+}
+
+.gallery-item.wide {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.gallery-item.vertical {
+  aspect-ratio: 9/16;
+}
+
+.gallery-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .gallery-item img {
@@ -912,4 +932,11 @@ footer {
 /* Team cards cursor */
 .team-card {
   cursor: pointer;
+}
+
+/* Team CTA section */
+.team-cta {
+  text-align: center;
+  margin-top: 4rem;
+  padding: 2rem 0;
 }

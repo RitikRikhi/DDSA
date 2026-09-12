@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Artwork Upload - DSA Media Crew Admin</title>
+  <link rel="stylesheet" href="css/artwork-upload.css">
+</head>
+<body>
+  <div class="admin-container">
+    <header class="admin-header">
+      <h1>Artwork Upload Portal</h1>
+      <p>Select a team member and upload their artwork</p>
+    </header>
+
+    <div class="upload-section">
+      <div class="form-group">
+        <label for="memberSelect">Select Team Member</label>
+        <select id="memberSelect" class="member-select">
+          <option value="">-- Select a member --</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="artworkInput">Upload Artwork</label>
+        <input type="file" id="artworkInput" accept="image/*" multiple class="file-input">
+        <p class="help-text">You can select multiple images</p>
+      </div>
+
+      <div class="preview-section" id="previewSection" style="display: none;">
+        <h3>Preview</h3>
+        <div class="preview-grid" id="previewGrid"></div>
+      </div>
+
+      <button id="uploadBtn" class="upload-btn" disabled>Upload Artwork</button>
+      <div id="uploadStatus" class="upload-status"></div>
+    </div>
+
+    <div class="current-artwork-section" id="currentArtworkSection" style="display: none;">
+      <h3>Current Artwork</h3>
+      <div class="current-artwork-grid" id="currentArtworkGrid"></div>
+    </div>
+  </div>
+
+  <script src="../client/js/team-data.js"></script>
+  <script src="js/artwork-upload.js"></script>
+</body>
+</html>

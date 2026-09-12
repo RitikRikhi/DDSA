@@ -1,0 +1,114 @@
+[
+  {
+    "id": "evt-meraki-26",
+    "name": "Meraki 2026 Mega Fest",
+    "venue": "Main University Auditorium & Stadium",
+    "date": "2026-03-24",
+    "time": "10:00 AM - 10:00 PM",
+    "coverImage": "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800",
+    "status": "live",
+    "description": "The flagship annual cultural extravaganza of CGC University with celebrity night, runway, dynamic stage acts, and full multi-cam live production.",
+    "assignedTeam": [
+      "Prince Kumar",
+      "Anshiv",
+      "Anshul Toppo",
+      "Ritik Rikhi"
+    ],
+    "tags": [
+      "Festival",
+      "Multi-Cam",
+      "Live Stream",
+      "Aftermovie"
+    ],
+    "tasksCount": 18,
+    "completedTasks": 14
+  },
+  {
+    "id": "evt-tech-fest-26",
+    "name": "TechX Innovations Conclave",
+    "venue": "Innovation Hub & Seminar Block 3",
+    "date": "2026-04-05",
+    "time": "09:30 AM - 05:00 PM",
+    "coverImage": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=800",
+    "status": "planning",
+    "description": "National hackathon coverage, robotics arena tracking, keynote streams, and product showcase cinematography.",
+    "assignedTeam": [
+      "Prince Kumar",
+      "Anshul Toppo"
+    ],
+    "tags": [
+      "Hackathon",
+      "Robotics",
+      "Keynote",
+      "Livestream"
+    ],
+    "tasksCount": 12,
+    "completedTasks": 4
+  },
+  {
+    "id": "evt-sports-meet-26",
+    "name": "Athletics & Sports Championship",
+    "venue": "Olympic Sports Complex",
+    "date": "2026-02-18",
+    "time": "08:00 AM - 06:00 PM",
+    "coverImage": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800",
+    "status": "completed",
+    "description": "High-speed shutter sports coverage, 120fps slow-motion track reels, drone aerial tracking, and official awards ceremony portraits.",
+    "assignedTeam": [
+      "Anshiv",
+      "Ritik Rikhi"
+    ],
+    "tags": [
+      "Sports",
+      "Slow-Mo",
+      "Drone Aerials",
+      "Podium"
+    ],
+    "tasksCount": 15,
+    "completedTasks": 15
+  },
+  {
+    "id": "evt-freshers-26",
+    "name": "Aura Freshers Night '26",
+    "venue": "Open Air Amphitheatre",
+    "date": "2026-01-14",
+    "time": "05:00 PM - 11:00 PM",
+    "coverImage": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=800",
+    "status": "completed",
+    "description": "Official welcome night coverage, laser light tracking, portrait booths, and aftermovie cinematic recap.",
+    "assignedTeam": [
+      "Prince Kumar",
+      "Anshiv",
+      "Anshul Toppo"
+    ],
+    "tags": [
+      "Freshers",
+      "Portraits",
+      "Cinematography"
+    ],
+    "tasksCount": 10,
+    "completedTasks": 10
+  },
+  {
+    "id": "evt-fashion-show-26",
+    "name": "Glamour Vogue Runway 2026",
+    "venue": "Grand Ballroom Block 5",
+    "date": "2026-05-12",
+    "time": "06:00 PM - 09:30 PM",
+    "coverImage": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800",
+    "status": "planning",
+    "description": "Editorial runway lighting, spotlight photography, 4K fashion reels, and backstage BTS candid portraiture.",
+    "assignedTeam": [
+      "Anshul Toppo",
+      "Ritik Rikhi"
+    ],
+    "tags": [
+      "Fashion",
+      "Runway",
+      "Editorial",
+      "BTS"
+    ],
+    "tasksCount": 8,
+    "completedTasks": 2
+  }
+]

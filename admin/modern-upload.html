@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Media Crew - Admin Upload</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: rgba(230, 50, 34, 0.1);
+            border-bottom: 2px solid #e63222;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #e63222;
+            letter-spacing: 2px;
+        }
+        
+        .header .nav {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .header .nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .header .nav a:hover {
+            color: #e63222;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        
+        .upload-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid rgba(230, 50, 34, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .upload-section h2 {
+            font-size: 24px;
+            margin-bottom: 30px;
+            color: #e63222;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #ccc;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e63222;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .form-group select option {
+            background: #1a1a2e;
+            color: #fff;
+        }
+        
+        .event-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .event-row select {
+            flex: 1;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #e63222;
+            color: #fff;
+        }
+        
+        .btn-primary:hover {
+            background: #ff4d4d;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(230, 50, 34, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: #fff;
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        .btn-danger:hover {
+            background: #ff6b6b;
+        }
+        
+        .files-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .files-section h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #e63222;
+        }
+        
+        .files-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .file-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .file-card:hover {
+            transform: translateY(-5px);
+            border-color: #e63222;
+            box-shadow: 0 10px 30px rgba(230, 50, 34, 0.2);
+        }
+        
+        .file-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .file-card h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        
+        .file-card .meta {
+            font-size: 13px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        
+        .file-card .event-tag {
+            display: inline-block;
+            background: rgba(230, 50, 34, 0.2);
+            color: #e63222;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+        
+        .file-card .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #888;
+        }
+        
+        .empty-state .icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .container {
+                padding: 0 15px;
+            }
+            
+            .upload-section,
+            .files-section {
+                padding: 25px;
+            }
+            
+            .event-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>DSA MEDIA CREW</h1>
+        <nav class="nav">
+            <a href="/gallery.html">Gallery</a>
+            <a href="/upload">Upload</a>
+        </nav>
+    </div>
+    
+    <div class="container">
+        <div class="upload-section">
+            <h2>📤 Upload Media</h2>
+            <form action="/api/upload" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" placeholder="Enter title for this media" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Event</label>
+                    <div class="event-row">
+                        <select name="eventName" id="eventSelect">
+                            <option value="">No Event</option>
+                        </select>
+                        <button type="button" class="btn btn-secondary" onclick="addNewEvent()">+ New Event</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="description" placeholder="Brief description">
+                </div>
+                
+                <div class="form-group">
+                    <label>Category</label>
+                    <select name="category">
+                        <option value="photography">Photography</option>
+                        <option value="videography">Videography</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="sports">Sports</option>
+                        <option value="events">Events</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>File</label>
+                    <input type="file" name="file" accept="image/*,video/*" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Upload Media</button>
+            </form>
+        </div>
+        
+        <div class="files-section">
+            <div class="files-header">
+                <h2>📁 Uploaded Files</h2>
+                <button class="btn btn-secondary" onclick="loadFiles()">Refresh</button>
+            </div>
+            <div class="files-grid" id="files"></div>
+        </div>
+    </div>
+    
+    <script>
+        loadEvents();
+        loadFiles();
+
+        function loadEvents() {
+            fetch('/api/events')
+                .then(r => r.json())
+                .then(events => {
+                    const select = document.getElementById('eventSelect');
+                    select.innerHTML = '<option value="">No Event</option>';
+                    events.forEach(event => {
+                        select.innerHTML += `<option value="${event.name}">${event.name}</option>`;
+                    });
+                });
+        }
+
+        function addNewEvent() {
+            const eventName = prompt('Enter new event name:');
+            if (eventName) {
+                const eventDate = prompt('Enter event date (YYYY-MM-DD):', new Date().toISOString().split('T')[0]);
+                const description = prompt('Enter event description:', '');
+                
+                fetch('/api/events', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: eventName,
+                        date: eventDate,
+                        description: description
+                    })
+                })
+                .then(r => r.json())
+                .then(() => {
+                    alert('Event added successfully!');
+                    loadEvents();
+                })
+                .catch(err => alert('Failed to add event: ' + err));
+            }
+        }
+
+        function loadFiles() {
+            fetch('/api/upload/files')
+                .then(r => r.json())
+                .then(data => {
+                    const filesDiv = document.getElementById('files');
+                    if (data.files && data.files.length > 0) {
+                        filesDiv.innerHTML = data.files.map(f => 
+                            `<div class="file-card">
+                                <img src="${f.url}" alt="${f.title || f.filename}" onerror="this.style.display='none'">
+                                <h3>${f.title || f.filename}</h3>
+                                ${f.eventName ? `<span class="event-tag">📅 ${f.eventName}</span>` : ''}
+                                <div class="meta">Category: ${f.category || 'General'}</div>
+                                <div class="meta">Size: ${(f.size / 1024).toFixed(1)} KB</div>
+                                <div class="actions">
+                                    <button class="btn btn-danger" onclick="deleteFile('${f.filename}')">Delete</button>
+                                </div>
+                            </div>`
+                        ).join('');
+                    } else {
+                        filesDiv.innerHTML = `
+                            <div class="empty-state">
+                                <div class="icon">📷</div>
+                                <p>No files uploaded yet</p>
+                            </div>
+                        `;
+                    }
+                });
+        }
+            
+        function deleteFile(filename) {
+            if (confirm('Delete ' + filename + '?')) {
+                fetch('/api/upload/files/' + filename, { method: 'DELETE' })
+                    .then(() => loadFiles());
+            }
+        }
+    </script>
+</body>
+</html>

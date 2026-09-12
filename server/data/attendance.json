@@ -1,0 +1,72 @@
+[
+  {
+    "id": "att-01",
+    "creator": "Prince Kumar",
+    "date": "2026-03-12",
+    "checkIn": "09:15 AM",
+    "checkOut": "06:30 PM",
+    "hours": 9.25,
+    "event": "Meraki '26 Pre-Production",
+    "status": "On Duty"
+  },
+  {
+    "id": "att-02",
+    "creator": "Anshiv",
+    "date": "2026-03-12",
+    "checkIn": "09:30 AM",
+    "checkOut": "06:00 PM",
+    "hours": 8.5,
+    "event": "Portraiture Shoot",
+    "status": "On Duty"
+  },
+  {
+    "id": "att-03",
+    "creator": "Anshul Toppo",
+    "date": "2026-03-12",
+    "checkIn": "10:00 AM",
+    "checkOut": "05:45 PM",
+    "hours": 7.75,
+    "event": "Fest Photo Stills",
+    "status": "On Duty"
+  },
+  {
+    "id": "att-04",
+    "creator": "Ritik Rikhi",
+    "date": "2026-03-12",
+    "checkIn": "09:00 AM",
+    "checkOut": "07:00 PM",
+    "hours": 10,
+    "event": "VFX & Aftermovie Edit",
+    "status": "On Duty"
+  },
+  {
+    "id": "att-05",
+    "creator": "Prince Kumar",
+    "date": "2026-03-11",
+    "checkIn": "09:00 AM",
+    "checkOut": "05:30 PM",
+    "hours": 8.5,
+    "event": "Equipment Prep",
+    "status": "Completed"
+  },
+  {
+    "id": "att-06",
+    "creator": "Anshiv",
+    "date": "2026-03-11",
+    "checkIn": "09:45 AM",
+    "checkOut": "05:15 PM",
+    "hours": 7.5,
+    "event": "Campus Coverage",
+    "status": "Completed"
+  },
+  {
+    "id": "att-07",
+    "creator": "Anshul Toppo",
+    "date": "2026-03-11",
+    "checkIn": "10:15 AM",
+    "checkOut": "06:00 PM",
+    "hours": 7.75,
+    "event": "BTS Shoot",
+    "status": "Completed"
+  }
+]

@@ -1,0 +1,98 @@
+[
+  {
+    "id": "eq-01",
+    "name": "Sony FX3 Cinema Camera",
+    "category": "Camera",
+    "serialNo": "SN-FX3-884920",
+    "status": "In Use",
+    "condition": "Mint",
+    "borrower": "Prince Kumar",
+    "project": "Meraki 2026 Main Stage",
+    "returnDate": "2026-03-25",
+    "image": "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=500"
+  },
+  {
+    "id": "eq-02",
+    "name": "Sony A7 IV Full-Frame Hybrid",
+    "category": "Camera",
+    "serialNo": "SN-A74-102948",
+    "status": "Available",
+    "condition": "Mint",
+    "borrower": null,
+    "project": null,
+    "returnDate": null,
+    "image": "https://images.unsplash.com/photo-1502982720700-bfff97f2da71?w=500"
+  },
+  {
+    "id": "eq-03",
+    "name": "Sony FE 24-70mm f/2.8 GM II",
+    "category": "Lens",
+    "serialNo": "SN-GM2470-49281",
+    "status": "In Use",
+    "condition": "Mint",
+    "borrower": "Anshiv",
+    "project": "Editorial Portraits",
+    "returnDate": "2026-03-24",
+    "image": "https://images.unsplash.com/photo-1617005082133-548c4dd27f35?w=500"
+  },
+  {
+    "id": "eq-04",
+    "name": "Sony FE 70-200mm f/2.8 GM OSS II",
+    "category": "Lens",
+    "serialNo": "SN-GM70200-92819",
+    "status": "Available",
+    "condition": "Mint",
+    "borrower": null,
+    "project": null,
+    "returnDate": null,
+    "image": "https://images.unsplash.com/photo-1589872516449-3660a5d454fa?w=500"
+  },
+  {
+    "id": "eq-05",
+    "name": "DJI RS3 Pro Gimbal Stabilizer",
+    "category": "Gimbal",
+    "serialNo": "SN-RS3P-559281",
+    "status": "In Use",
+    "condition": "Good",
+    "borrower": "Prince Kumar",
+    "project": "Meraki 2026 Main Stage",
+    "returnDate": "2026-03-25",
+    "image": "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=500"
+  },
+  {
+    "id": "eq-06",
+    "name": "DJI Mavic 3 Cine 5.1K Drone",
+    "category": "Drone",
+    "serialNo": "SN-MAV3C-338291",
+    "status": "Available",
+    "condition": "Mint",
+    "borrower": null,
+    "project": null,
+    "returnDate": null,
+    "image": "https://images.unsplash.com/photo-1508614589041-895b88991e3e?w=500"
+  },
+  {
+    "id": "eq-07",
+    "name": "RØDE Wireless PRO (2x TX + 1x RX)",
+    "category": "Audio",
+    "serialNo": "SN-RODEW-104928",
+    "status": "Available",
+    "condition": "Mint",
+    "borrower": null,
+    "project": null,
+    "returnDate": null,
+    "image": "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=500"
+  },
+  {
+    "id": "eq-08",
+    "name": "Aputure LS 300d II + Light Dome III",
+    "category": "Lighting",
+    "serialNo": "SN-AP300D-928104",
+    "status": "Maintenance",
+    "condition": "Fair (Bulb check)",
+    "borrower": null,
+    "project": null,
+    "returnDate": null,
+    "image": "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=500"
+  }
+]

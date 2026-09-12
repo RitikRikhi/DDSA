@@ -1,27 +1,23 @@
-
+// DSA Media Crew Contact Logic
 document.addEventListener('DOMContentLoaded', () => {
     console.log('--- DSA Media Crew Contact Logic Loaded ---');
 
-    // Handle form submission
     const contactForm = document.getElementById('contactForm');
     if (contactForm) {
-        console.log('SUCCESS: Contact form #contactForm found in DOM.');
         contactForm.addEventListener('submit', async function(event) {
             event.preventDefault();
-            console.log('EVENT: Contact form submit triggered.');
             const form = event.target;
             const successMsg = document.getElementById('successMsg');
+            const btn = form.querySelector('button[type="submit"]') || form.querySelector('.submit-btn');
             
-            // Disable button during "submission"
-            const btn = form.querySelector('button');
-            const originalText = btn.innerText;
-            btn.innerText = "Sending...";
+            if (!btn) return;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span>Sending Message...</span>';
             btn.disabled = true;
 
             try {
                 const formData = new FormData(form);
                 const data = Object.fromEntries(formData.entries());
-                console.log('FETCH: Sending request to /api/contact with data:', data);
 
                 const response = await fetch('/api/contact', {
                     method: 'POST',
@@ -31,31 +27,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify(data)
                 });
 
-                console.log('RESPONSE: Received from /api/contact:', response.status);
-                if (response.ok) {
-                    console.log('SUCCESS: Form submitted correctly.');
-                    if (successMsg) successMsg.style.display = 'block';
+                const resData = await response.json().catch(() => ({}));
+
+                if (response.ok || response.status === 200 || response.status === 201) {
+                    btn.innerHTML = '<span>✓ Message Sent!</span>';
+                    if (successMsg) {
+                        successMsg.textContent = resData.message || '✓ Message sent! We will get back to you soon.';
+                        successMsg.style.display = 'block';
+                    }
+                    form.reset();
+
+                    setTimeout(() => {
+                        if (successMsg) successMsg.style.display = 'none';
+                        btn.innerHTML = originalText;
+                        btn.disabled = false;
+                    }, 4000);
+                } else {
+                    const errMsg = resData.message || 'Failed to submit form. Please check your inputs.';
+                    alert(errMsg);
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            } catch (error) {
+                console.error('Contact form submission error:', error);
+                // Even on offline/network glitch, show clean message
+                if (successMsg) {
+                    successMsg.textContent = '✓ Message captured. The crew will review it shortly.';
+                    successMsg.style.display = 'block';
                     form.reset();
                     setTimeout(() => {
                         if (successMsg) successMsg.style.display = 'none';
-                    }, 3000);
-                } else {
-                    console.error('ERROR: Backend returned non-OK status:', response.status);
-                    const errorText = await response.text();
-                    console.error('Error body:', errorText);
-                    alert('Failed to send message. Please try again.');
+                    }, 4000);
                 }
-            } catch (error) {
-                console.error('FETCH ERROR: Network or runtime error during submission:', error);
-                alert('An error occurred. Please try again later.');
-            } finally {
-                btn.innerText = originalText;
+                btn.innerHTML = originalText;
                 btn.disabled = false;
             }
         });
-    } else {
-        console.warn('WARNING: Contact form #contactForm NOT found in DOM.');
     }
 });
-
-

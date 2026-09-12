@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Gallery Test</title>
+    <style>
+        body { font-family: Arial; background: #1a1a1a; color: white; padding: 20px; }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .gallery-item { background: #2a2a2a; padding: 10px; border-radius: 8px; }
+        .gallery-item img { width: 100%; height: 150px; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <h1>Simple Gallery Test</h1>
+    <p>Loading images from /api/upload/files</p>
+    <div class="gallery" id="gallery"></div>
+    
+    <script>
+        fetch('/api/upload/files')
+            .then(r => r.json())
+            .then(data => {
+                console.log('Data:', data);
+                const gallery = document.getElementById('gallery');
+                
+                if (data.files && data.files.length > 0) {
+                    gallery.innerHTML = data.files.map(f => 
+                        `<div class="gallery-item">
+                            <img src="${f.url}" alt="${f.filename}" onerror="this.style.background='red'; this.alt='FAILED: ' + this.src; console.error('Failed to load:', this.src)">
+                            <p>${f.filename}</p>
+                            <small>URL: ${f.url}</small><br>
+                            <small>Type: ${f.type}</small>
+                        </div>`
+                    ).join('');
+                } else {
+                    gallery.innerHTML = '<p>No files found</p>';
+                }
+            })
+            .catch(err => {
+                console.error('Error:', err);
+                document.getElementById('gallery').innerHTML = '<p style="color: red;">Error: ' + err.message + '</p>';
+            });
+    </script>
+</body>
+</html>

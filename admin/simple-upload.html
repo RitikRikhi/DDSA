@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Media Crew - Simple Upload</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #e63222;
+            margin-bottom: 20px;
+        }
+        .upload-section {
+            background: #2a2a2a;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #888;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            background: #3a3a3a;
+            border: 1px solid #444;
+            color: #fff;
+            border-radius: 5px;
+        }
+        button {
+            background: #e63222;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #c4291b;
+        }
+        .file-input {
+            border: 2px dashed #444;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .file-input:hover {
+            border-color: #e63222;
+        }
+        #status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background: #10b981;
+            color: #fff;
+        }
+        .error {
+            background: #ef4444;
+            color: #fff;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .gallery-item {
+            background: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .gallery-item img, .gallery-item video {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .gallery-item-info {
+            padding: 10px;
+        }
+        .gallery-item-title {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        .gallery-item-meta {
+            font-size: 12px;
+            color: #888;
+        }
+        .delete-btn {
+            background: #ef4444;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DSA Media Crew - Upload Panel</h1>
+        
+        <div class="upload-section">
+            <h2>Upload Media</h2>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="category">
+                        <option value="photography">Photography</option>
+                        <option value="videography">Videography</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="sports">Sports</option>
+                        <option value="events">Events</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Event Name</label>
+                    <input type="text" id="eventName">
+                </div>
+                <div class="form-group">
+                    <label>File (Images & Videos)</label>
+                    <div class="file-input" onclick="document.getElementById('file').click()">
+                        <p>Click to select files (multiple supported)</p>
+                        <input type="file" id="file" accept="image/*,video/*" multiple style="display: none;">
+                    </div>
+                    <p id="fileCount" style="margin-top: 10px; color: #888;"></p>
+                </div>
+                <button type="submit">Upload Files</button>
+            </form>
+            <div id="status"></div>
+        </div>
+
+        <div class="upload-section">
+            <h2>Uploaded Files</h2>
+            <button onclick="loadFiles()">Refresh Gallery</button>
+            <div class="gallery" id="gallery"></div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('file').addEventListener('change', function(e) {
+            const count = e.target.files.length;
+            document.getElementById('fileCount').textContent = count > 0 ? `${count} file(s) selected` : '';
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const files = document.getElementById('file').files;
+            if (files.length === 0) {
+                showStatus('Please select at least one file', 'error');
+                return;
+            }
+
+            const title = document.getElementById('title').value;
+            const category = document.getElementById('category').value;
+            const eventName = document.getElementById('eventName').value;
+
+            let uploaded = 0;
+            let failed = 0;
+
+            for (let i = 0; i < files.length; i++) {
+                const formData = new FormData();
+                formData.append('title', `${title} ${i + 1}`);
+                formData.append('category', category);
+                formData.append('eventName', eventName);
+                formData.append('image', files[i]);
+
+                try {
+                    const response = await fetch('/api/photos', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        uploaded++;
+                    } else {
+                        failed++;
+                    }
+                } catch (error) {
+                    failed++;
+                }
+            }
+
+            if (uploaded > 0) {
+                showStatus(`Successfully uploaded ${uploaded} file(s)!${failed > 0 ? ` ${failed} failed.` : ''}`, 'success');
+                document.getElementById('uploadForm').reset();
+                document.getElementById('fileCount').textContent = '';
+                loadFiles();
+            } else {
+                showStatus('All uploads failed', 'error');
+            }
+        });
+
+        async function loadFiles() {
+            try {
+                const response = await fetch('/api/photos');
+                const data = await response.json();
+                const files = data.photos || [];
+
+                const gallery = document.getElementById('gallery');
+                gallery.innerHTML = files.map(file => {
+                    const isVideo = file.type === 'video' || file.imageUrl.match(/\.(mp4|webm|mov)$/i);
+                    return `
+                        <div class="gallery-item">
+                            ${isVideo 
+                                ? `<video src="${file.imageUrl}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`
+                                : `<img src="${file.imageUrl}" alt="${file.title}" loading="lazy">`
+                            }
+                            <div class="gallery-item-info">
+                                <div class="gallery-item-title">${file.title}</div>
+                                <div class="gallery-item-meta">${file.category}</div>
+                                ${file.eventName ? `<div class="gallery-item-meta">📅 ${file.eventName}</div>` : ''}
+                                <button class="delete-btn" onclick="deleteFile('${file._id}')">Delete</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                showStatus('Error loading files', 'error');
+            }
+        }
+
+        async function deleteFile(id) {
+            if (!confirm('Delete this file?')) return;
+            
+            try {
+                const response = await fetch(`/api/photos/${id}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    loadFiles();
+                }
+            } catch (error) {
+                showStatus('Error deleting file', 'error');
+            }
+        }
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = type;
+            status.style.display = 'block';
+            setTimeout(() => status.style.display = 'none', 5000);
+        }
+
+        // Load files on page load
+        loadFiles();
+    </script>
+</body>
+</html>

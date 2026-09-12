@@ -15,7 +15,12 @@ const storage = new CloudinaryStorage({
       folder: 'dsa_media',
       resource_type: isVideo ? 'video' : 'image',
       allowed_formats: ['jpg', 'png', 'jpeg', 'gif', 'mp4', 'mov', 'webm'],
-      transformation: isVideo ? [] : [{ width: 1000, crop: 'limit' }]
+      transformation: isVideo ? [] : [
+        { width: 1200, height: 800, crop: 'limit', quality: 'auto:good', fetch_format: 'auto' }
+      ],
+      eager: isVideo ? [] : [
+        { width: 600, height: 400, crop: 'fill', quality: 'auto:good', fetch_format: 'auto' }
+      ]
     };
   },
 });

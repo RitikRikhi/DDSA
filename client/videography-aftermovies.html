@@ -8,6 +8,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="css/navbar.css">
     <style>
         :root {
             --black: #0a0a0a;
@@ -540,24 +541,33 @@
         <div class="preloader-line"></div>
     </div>
 
-    <nav>
-        <a href="home.html" class="nav-logo"><span style="color:var(--red)">DSA</span><span style="color:var(--gold);margin:0 2px">·</span>MEDIA CREW</a>
+    <!-- NAVIGATION -->
+    <nav class="site-nav">
+        <a href="home.html" class="nav-logo">
+            <span class="logo-red">DSA</span><span class="logo-dot">·</span><span class="logo-text">MEDIA CREW</span>
+        </a>
         <ul class="nav-links">
             <li><a href="home.html">Home</a></li>
-            <li><a href="home.html#about">About</a></li>
-            <li><a href="home.html#services">Services</a></li>
-            <li><a href="gallery.html">Photography</a></li>
-            <li><a href="videography-aftermovies.html" style="color:var(--gold)">Videography</a></li>
-            <li><a href="editing-designs.html">Editing & Designs</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="team.html">Team</a></li>
+            <li><a href="videography-aftermovies.html" class="active">Videography</a></li>
+            <li><a href="editing-designs.html">Designs</a></li>
             <li class="nav-item-dropdown">
-                <a style="cursor: pointer; display: flex; align-items: center; gap: 4px;">Events <span style="font-size: 0.6rem;">▼</span></a>
-                <div class="dropdown-content">
-                    <a href="meraki26.html">Meraki 26</a>
-                </div>
+                <a class="nav-dropdown-toggle">Events <span class="dropdown-arrow">▼</span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="meraki26.html">Meraki '26</a></li>
+                </ul>
             </li>
             <li><a href="home.html#contact">Contact</a></li>
         </ul>
-        <span class="nav-tag">Premium Media · Est. 2020</span>
+        <div class="nav-status-badge">
+            <span class="status-dot"></span>OFFICIAL CREW
+        </div>
+        <button class="nav-toggle" aria-label="Toggle Navigation Menu">
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+        </button>
     </nav>
 
     <header class="page-header">
@@ -596,6 +606,8 @@
     </footer>
 
     <script src="js/video-modal.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/performance.js"></script>
     <script src="js/videography-logic.js"></script>
     <script>
         // Preloader completely handled by CSS animation (preloader-fade-out)

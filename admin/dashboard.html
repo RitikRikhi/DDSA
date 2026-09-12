@@ -550,6 +550,18 @@
             <option value="campus">Campus Life</option>
           </select>
         </div>
+        <div class="input-wrapper">
+          <label>Event Name</label>
+          <input type="text" id="eventName" class="premium-input" placeholder="e.g., Annual Fest 2026">
+        </div>
+        <div class="input-wrapper">
+          <label>Event Date</label>
+          <input type="date" id="eventDate" class="premium-input">
+        </div>
+        <div class="input-wrapper" style="grid-column: span 2;">
+          <label>Description</label>
+          <input type="text" id="description" class="premium-input" placeholder="Brief description of the media">
+        </div>
         <div class="input-wrapper" style="grid-column: span 2;">
           <label>Payload (JPG / MP4)</label>
           <div class="file-input-wrapper" onclick="document.getElementById('image').click()">
@@ -563,9 +575,16 @@
     </div>
 
     <div class="top-strip" style="margin-bottom: 40px;">
-      <h2 style="font-family: var(--display); font-size: 42px;">ASSET LIBRARY</h2>
-      <span style="font-family: var(--mono); font-size: 11px; cursor: pointer; color: var(--red); letter-spacing: 2px;"
-        onclick="loadPhotos()">↻ RELOAD SYSTEM</span>
+      <div>
+        <h2 style="font-family: var(--display); font-size: 42px;">ASSET LIBRARY</h2>
+      </div>
+      <div style="display: flex; gap: 20px; align-items: center;">
+        <select id="eventFilter" class="premium-input" style="width: 200px;" onchange="loadPhotos()">
+          <option value="all">All Events</option>
+        </select>
+        <span style="font-family: var(--mono); font-size: 11px; cursor: pointer; color: var(--red); letter-spacing: 2px;"
+          onclick="loadPhotos()">↻ RELOAD SYSTEM</span>
+      </div>
     </div>
 
     <div id="photoList" class="studio-gallery">
@@ -806,10 +825,27 @@
                         const photoList = document.getElementById('photoList');
                         const totalPhotosEl = document.getElementById('totalPhotos');
                         const thisWeekEl = document.getElementById('thisWeek');
+                        const eventFilter = document.getElementById('eventFilter');
+                        const selectedEvent = eventFilter.value;
 
                         try {
-                          const res = await fetch('/api/photos');
-                          const photos = await res.json();
+                          let url = '/api/photos';
+                          if (selectedEvent && selectedEvent !== 'all') {
+                            url += `?eventName=${encodeURIComponent(selectedEvent)}`;
+                          }
+                          
+                          const res = await fetch(url);
+                          const data = await res.json();
+                          const photos = data.photos || [];
+
+                          // Populate event filter dropdown
+                          const allEvents = [...new Set(photos.map(p => p.eventName).filter(e => e))];
+                          const currentFilterValue = eventFilter.value;
+                          eventFilter.innerHTML = '<option value="all">All Events</option>';
+                          allEvents.forEach(event => {
+                            eventFilter.innerHTML += `<option value="${event}">${event}</option>`;
+                          });
+                          eventFilter.value = currentFilterValue;
 
                           if (!photos || photos.length === 0) {
                             photoList.innerHTML = `<div style="grid-column: 1/-1; padding: 100px; text-align: center; font-family: var(--mono); color: var(--muted); letter-spacing: 4px;">NO ASSETS DETECTED IN STUDIO STORAGE</div>`;
@@ -827,12 +863,13 @@
 
                           photoList.innerHTML = photos.map(photo => {
                             const isVideo = photo.imageUrl.toLowerCase().endsWith('.mp4') || photo.category === 'videography';
+                            const eventInfo = photo.eventName ? `<span style="color: var(--red);">EVENT: ${photo.eventName.toUpperCase()}</span>` : '';
                             return `
             <div class="media-card">
               <div class="media-preview">
                 ${isVideo ?
                                 `<video src="${photo.imageUrl}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>` :
-                                `<img src="${photo.imageUrl}" alt="${photo.title}" onerror="this.src='https://via.placeholder.com/400x300?text=MEDIA+OFFLINE'">`
+                                `<img src="${photo.imageUrl}" alt="${photo.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=MEDIA+OFFLINE'">`
                               }
               </div>
               <div class="media-info">
@@ -841,6 +878,8 @@
                   <span>${(photo.category || 'GENERAL').toUpperCase()}</span>
                   <span>${new Date(photo.createdAt).toLocaleDateString()}</span>
                 </div>
+                ${eventInfo ? `<div class="media-meta" style="margin-top: 10px;">${eventInfo}</div>` : ''}
+                ${photo.description ? `<div class="media-meta" style="margin-top: 5px; color: var(--muted);">${photo.description}</div>` : ''}
                 <div class="media-actions">
                   <button class="action-btn" onclick="copyLink('${photo.imageUrl}')">COPY LINK</button>
                   <button class="action-btn del" onclick="deletePhoto('${photo._id}')">REMOVE</button>
@@ -864,6 +903,9 @@
                           e.preventDefault();
                           const title = document.getElementById('title').value;
                           const category = document.getElementById('category').value;
+                          const eventName = document.getElementById('eventName').value;
+                          const eventDate = document.getElementById('eventDate').value;
+                          const description = document.getElementById('description').value;
                           const image = document.getElementById('image').files[0];
                           const uploadBtn = document.getElementById('uploadBtn');
 
@@ -875,6 +917,9 @@
                           const formData = new FormData();
                           formData.append('title', title);
                           formData.append('category', category);
+                          formData.append('eventName', eventName);
+                          formData.append('eventDate', eventDate);
+                          formData.append('description', description);
                           formData.append('image', image);
 
                           try {

@@ -24,9 +24,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const res = await fetch(`/api/photos?page=${page}&limit=${itemsLimit}&category=${category}`);
+            const res = await fetch('/api/upload/files');
             const data = await res.json();
-            const videos = data.photos;
+            const allFiles = data.files || [];
+            
+            console.log('All files from API:', allFiles);
+            
+            // Filter for videography category (same as gallery)
+            const videos = allFiles.filter(file => {
+                const categoryMatch = file.category && file.category.toLowerCase() === 'videography';
+                console.log(`File: ${file.filename}, Category: ${file.category}, CategoryMatch: ${categoryMatch}`);
+                return categoryMatch;
+            });
+            
+            console.log('Filtered videos:', videos);
 
             if (page === 1) {
                 videoGrid.innerHTML = '';
@@ -44,50 +55,62 @@ document.addEventListener('DOMContentLoaded', () => {
             videos.forEach(video => {
                 const videoItem = document.createElement('div');
                 videoItem.className = 'video-item';
-                videoItem.setAttribute('data-video', video.imageUrl);
-                videoItem.setAttribute('data-rotation', video.rotation || 0);
+                videoItem.setAttribute('data-video', video.url);
+                videoItem.setAttribute('data-rotation', 0);
                 
-                const isVideo = video.imageUrl.match(/\.(mp4|webm|ogg|mov)$/i);
+                const isVideo = video.mimeType && video.mimeType.startsWith('video/');
                 
-                // Specific logic for Aftermovie 3 to avoid the initial "WARNING" frame
-                const timestamp = video.title && video.title.toLowerCase().includes('aftermovie 3') ? '#t=30' : '#t=5';
-                
-                // For rotated videos (90/270 deg) in a 16:9 landscape box.
-                // When using object-fit: contain, a vertical video (9:16) in a 16:9 container 
-                // becomes a strip of width (9/16)^2 * containerWidth = 0.316 * containerWidth.
-                // To fill the box, we scale by 1 / 0.316 = 3.16.
-                const isRotated = video.rotation && video.rotation % 180 !== 0;
-                const transform = `rotate(${video.rotation || 0}deg)${isRotated ? ' scale(3.16)' : ''}`;
+                const timestamp = '#t=3';
+                const transform = 'rotate(0deg)';
 
-                const optimizedUrl = optimizeCloudinaryUrl(video.imageUrl);
-                videoItem.innerHTML = `
-                    <div class="video-placeholder" style="width:100%;height:100%; position: relative; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                        ${isVideo ? 
-                            `<video src="${optimizedUrl}${timestamp}" class="video-thumbnail" muted playsinline preload="metadata" style="width:100%; height:100%; object-fit: ${isRotated ? 'contain' : 'cover'}; transform: ${transform}; position: absolute;"></video>` : 
-                            `<img src="${optimizedUrl}" alt="${video.title}" class="video-thumbnail" loading="lazy" style="width:100%; height:100% ;object-fit: cover; transform: rotate(${video.rotation || 0}deg);">`
-                        }
-                    </div>
+                const videoUrl = video.url.startsWith('/') ? video.url : `/media/${video.filename}`;
+                
+                // Only show play button for actual videos
+                const playButton = isVideo ? `
                     <div class="video-play-btn">
                         <svg viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z" />
                         </svg>
                     </div>
-                    <div class="video-overlay">
-                        <div class="video-info">
-                            <p class="video-category">${video.category || 'Videography'}</p>
-                            <h3 class="video-title">${video.title || 'Untitled'}</h3>
-                            <p class="video-year">${new Date(video.uploadedAt).getFullYear() || '2026'}</p>
+                ` : '';
+                
+                // Use video element with poster/thumbnail for better preview
+                if (isVideo) {
+                    videoItem.innerHTML = `
+                        <video 
+                            src="${videoUrl}" 
+                            class="video-thumbnail" 
+                            muted 
+                            playsinline 
+                            preload="metadata"
+                            poster="${videoUrl}${timestamp}"
+                            style="width:100%; height:100%; object-fit: cover; transform: ${transform}; position: absolute;"
+                        ></video>
+                        ${playButton}
+                        <div class="video-overlay">
+                            <div class="video-info">
+                                <p class="video-category">${video.category || 'Videography'}</p>
+                                <h3 class="video-title">${video.title || video.filename || 'Untitled'}</h3>
+                                <p class="video-year">${new Date(video.uploadedAt || Date.now()).getFullYear() || '2026'}</p>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                } else {
+                    videoItem.innerHTML = `
+                        <img src="${videoUrl}" alt="${video.title}" class="video-thumbnail" loading="lazy" style="width:100%; height:100%; object-fit: cover; transform: rotate(0deg);">
+                        <div class="video-overlay">
+                            <div class="video-info">
+                                <p class="video-category">${video.category || 'Videography'}</p>
+                                <h3 class="video-title">${video.title || video.filename || 'Untitled'}</h3>
+                                <p class="video-year">${new Date(video.uploadedAt || Date.now()).getFullYear() || '2026'}</p>
+                            </div>
+                        </div>
+                    `;
+                }
                 videoGrid.appendChild(videoItem);
             });
 
-            if (data.hasMore) {
-                setupLoadMore();
-            } else {
-                removeLoadMore();
-            }
+            removeLoadMore();
 
         } catch (error) {
             console.error("Error loading videos:", error);

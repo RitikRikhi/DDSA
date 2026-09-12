@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Files</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 { color: #e63222; }
+        .upload-area {
+            border: 2px dashed #444;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        .upload-area:hover { border-color: #e63222; }
+        input[type="file"] { display: none; }
+        button {
+            background: #e63222;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+        button:hover { background: #c4291b; }
+        #status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success { background: #10b981; }
+        .error { background: #ef4444; }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .gallery-item {
+            background: #2a2a2a;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .gallery-item img, .gallery-item video {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .gallery-item-info {
+            padding: 10px;
+        }
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>📤 Upload Files</h1>
+    <p>Files will be saved to: server/uploads/</p>
+    
+    <div class="upload-area" id="uploadArea">
+        <p>Click to select file or drag and drop</p>
+        <input type="file" id="fileInput" accept="image/*,video/*">
+    </div>
+    
+    <p>Or select file directly: <input type="file" id="fileInputDirect" accept="image/*,video/*"></p>
+    
+    <p id="fileName"></p>
+    <button id="uploadBtn">Upload File</button>
+    
+    <div id="status"></div>
+    
+    <h2 style="margin-top: 40px;">Uploaded Files</h2>
+    <button onclick="loadFiles()" style="width: auto; margin-bottom: 15px;">Refresh</button>
+    <div class="gallery" id="gallery"></div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const fileInputDirect = document.getElementById('fileInputDirect');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const status = document.getElementById('status');
+        const gallery = document.getElementById('gallery');
+
+        // Click to select file
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Show selected file name from both inputs
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                document.getElementById('fileName').textContent = fileInput.files[0].name;
+            }
+        });
+
+        fileInputDirect.addEventListener('change', () => {
+            if (fileInputDirect.files.length > 0) {
+                document.getElementById('fileName').textContent = fileInputDirect.files[0].name;
+            }
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#e63222';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.borderColor = '#444';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.borderColor = '#444';
+            fileInput.files = e.dataTransfer.files;
+            if (fileInput.files.length > 0) {
+                document.getElementById('fileName').textContent = fileInput.files[0].name;
+            }
+        });
+
+        // Upload file
+        uploadBtn.addEventListener('click', async () => {
+            // Check both file inputs
+            const fileToUpload = fileInput.files.length > 0 ? fileInput.files[0] : 
+                                 fileInputDirect.files.length > 0 ? fileInputDirect.files[0] : null;
+            
+            if (!fileToUpload) {
+                showStatus('Please select a file first', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', fileToUpload);
+
+            uploadBtn.disabled = true;
+            uploadBtn.textContent = 'Uploading...';
+
+            try {
+                const response = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showStatus('File uploaded successfully!', 'success');
+                    fileInput.value = '';
+                    fileInputDirect.value = '';
+                    document.getElementById('fileName').textContent = '';
+                    loadFiles();
+                } else {
+                    showStatus('Upload failed: ' + (result.error || 'Unknown error'), 'error');
+                }
+            } catch (error) {
+                showStatus('Upload error: ' + error.message, 'error');
+            } finally {
+                uploadBtn.disabled = false;
+                uploadBtn.textContent = 'Upload File';
+            }
+        });
+
+        // Load files
+        async function loadFiles() {
+            try {
+                const response = await fetch('/api/upload/files');
+                const result = await response.json();
+                
+                if (result.files) {
+                    gallery.innerHTML = result.files.map(file => {
+                        const isVideo = file.type === 'video';
+                        return `
+                            <div class="gallery-item">
+                                ${isVideo 
+                                    ? `<video src="${file.url}" muted loop onmouseover="this.play()" onmouseout="this.pause()"></video>`
+                                    : `<img src="${file.url}" loading="lazy">`
+                                }
+                                <div class="gallery-item-info">
+                                    <small>${file.filename}</small>
+                                    <button class="delete-btn" onclick="deleteFile('${file.filename}')">Delete</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (error) {
+                console.error('Error loading files:', error);
+            }
+        }
+
+        // Delete file
+        async function deleteFile(filename) {
+            if (!confirm('Delete this file?')) return;
+            
+            try {
+                const response = await fetch(`/api/upload/files/${filename}`, {
+                    method: 'DELETE'
+                });
+                
+                if (response.ok) {
+                    loadFiles();
+                }
+            } catch (error) {
+                console.error('Error deleting file:', error);
+            }
+        }
+
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = type;
+            status.style.display = 'block';
+            setTimeout(() => status.style.display = 'none', 3000);
+        }
+
+        // Load files on page load
+        loadFiles();
+    </script>
+</body>
+</html>
