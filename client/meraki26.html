@@ -509,7 +509,7 @@
   </nav>
 
   <section class="hero">
-    <video autoplay loop muted playsinline preload="auto" poster="img/events/meraki_hero.png" class="hero-video">
+    <video autoplay loop muted playsinline preload="auto" poster="img/events/meraki_hero.png" class="hero-video" controlsList="nodownload" disablePictureInPicture oncontextmenu="return false;">
       <source src="https://res.cloudinary.com/dyflxz9yl/video/upload/f_auto,q_auto/v1776492884/dsa_media/meraki/dsa_media/meraki/meraki_2k_hq_bg.mp4" type="video/mp4">
     </video>
     <div class="hero-overlay"></div>
@@ -566,6 +566,7 @@
 
   <script src="js/navbar.js"></script>
   <script src="js/performance.js"></script>
+  <script src="js/media-protection.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const video = document.querySelector('.hero-video');

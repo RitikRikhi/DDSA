@@ -92,33 +92,32 @@ const teamData = {
       {
         id: 'vp2',
         name: 'Tajesh',
-        role: 'Advisor & Creative Consultant',
+        role: 'Vice President',
         category: 'leader',
-        image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=face',
-        fallbackImage: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&h=1000&fit=crop&crop=face',
-        bio: 'Senior Advisor and post-production powerhouse who crafts rhythmic narratives, color grades complex multicam footage, and mentors the media crew in high-end VFX & sound design.',
-        tagline: 'Crafting narratives frame by intentional frame.',
-        specialty: 'POST-PRODUCTION / MOTION / COLOR SCIENCE',
-        skills: ['Video Editing', 'Motion Graphics', 'DaVinci Resolve', 'Sound Design', 'Adobe Premiere Pro', 'Post-Production Workflow'],
+        image: '/media/DSC03047-2.jpg',
+        fallbackImage: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&h=1000&fit=crop&crop=face',
+        overlayImage: '/media/DSC03047-2.jpg',
+        bio: 'Vice President at DSA Media Crew directing executive creative strategy, field production operations, and multi-camera crew synchronization across campus-wide media initiatives.',
+        tagline: 'Orchestrating vision, precision, and executive excellence.',
+        specialty: 'OPERATIONS / CINEMATOGRAPHY / STRATEGY',
+        skills: ['Executive Operations', 'Cinematography', 'Creative Direction', 'Crew Logistics', 'Post-Production Supervision', 'Live Broadcasting'],
         mediaDNA: {
-          storytelling: 18,
-          cinematography: 12,
-          editing: 25,
-          creativity: 17,
+          storytelling: 19,
+          cinematography: 20,
+          editing: 18,
+          creativity: 22,
           leadership: 28
         },
-        credits: ['Annual Fest Aftermovie 2025', 'Tech Fest Mega Teaser', 'Freshers Promo 2026', 'Alumni Meet Recap', 'Induction Video'],
+        credits: ['Meraki 2026', 'Annual Fest 2025', 'Tech Conclave 2025', 'Cultural Showcase', 'Orientation Series'],
         socials: {
           instagram: 'https://instagram.com/dsamediacrew',
-          linkedin: 'https://linkedin.com',
-          youtube: 'https://youtube.com'
+          linkedin: 'https://linkedin.com'
         },
         portfolio: {
-          photos: [],
-          videos: [
-            { url: 'videos/digital_3d_logo.mp4', thumbnail: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=800', project: 'Annual Fest Aftermovie', event: 'Annual Fest 2025', year: '2025', role: 'Lead Editor' },
-            { url: 'videos/digital_3d_logo.mp4', thumbnail: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800', project: 'Freshers Promo', event: 'Freshers 2026', year: '2026', role: 'Editor & Motion' }
-          ]
+          photos: [
+            { url: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=600', event: 'Meraki 2026', date: '2026-03-24', role: 'Executive Lead' }
+          ],
+          videos: []
         },
         artwork: []
       }
@@ -589,37 +588,6 @@ const teamData = {
       },
       portfolio: {
         photos: [],
-        videos: []
-      },
-      artwork: []
-    },
-    {
-      id: 'm16',
-      name: 'Palak Sharma',
-      role: 'Content Creator & Media Strategist',
-      category: 'content',
-      image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&h=1000&fit=crop&crop=face',
-      fallbackImage: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&h=1000&fit=crop&crop=face',
-      bio: 'Content creator and media strategist crafting compelling copy, viral post structures, and engagement plans that elevate DSA Media Crew\'s digital footprint.',
-      tagline: 'Words and strategy that drive digital resonance.',
-      specialty: 'COPYWRITING / SOCIAL STRATEGY / CAMPAIGNS',
-      skills: ['Copywriting', 'Content Strategy', 'Social Media Analytics', 'Campaign Management', 'Story Architecture'],
-      mediaDNA: {
-        storytelling: 28,
-        cinematography: 12,
-        editing: 18,
-        creativity: 26,
-        leadership: 24
-      },
-      credits: ['Social Media Growth Plan', 'Official Event Press Releases', 'Instagram Captions & Stories', 'Newsletter'],
-      socials: {
-        instagram: 'https://instagram.com/dsamediacrew',
-        linkedin: 'https://linkedin.com'
-      },
-      portfolio: {
-        photos: [
-          { url: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600', event: 'Campus Campaign', date: '2025-01-15', role: 'Lead Copywriter' }
-        ],
         videos: []
       },
       artwork: []

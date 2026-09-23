@@ -80,14 +80,39 @@ function updateLightboxContent() {
         video.controls = true;
         video.autoplay = true;
         video.playsInline = true;
+        video.setAttribute('controlsList', 'nodownload noplaybackrate');
+        video.setAttribute('disablePictureInPicture', 'true');
+        video.setAttribute('disableRemotePlayback', 'true');
+        video.setAttribute('oncontextmenu', 'return false;');
+        video.disablePictureInPicture = true;
         wrapper.appendChild(video);
     } else {
         const img = document.createElement('img');
         img.src = item.url;
         img.className = 'lightbox-image';
         img.alt = item.title;
+        img.setAttribute('draggable', 'false');
+        img.setAttribute('oncontextmenu', 'return false;');
         wrapper.appendChild(img);
     }
+
+    // Embed protective watermark badge
+    const watermark = document.createElement('div');
+    watermark.className = 'dsa-embedded-watermark';
+    watermark.textContent = 'DSA MEDIA CREW · OFFICIAL ARCHIVE';
+    wrapper.appendChild(watermark);
+
+    // Embed invisible protection shield
+    const shield = document.createElement('div');
+    shield.className = 'media-protection-shield';
+    shield.oncontextmenu = (e) => {
+        e.preventDefault();
+        if (window.DSA_MEDIA_PROTECTION && window.DSA_MEDIA_PROTECTION.showToast) {
+            window.DSA_MEDIA_PROTECTION.showToast("Protected Lightbox Media · Downloading Disabled");
+        }
+        return false;
+    };
+    wrapper.appendChild(shield);
 
     titleEl.textContent = item.title || 'Untitled';
     categoryEl.textContent = item.category || '';

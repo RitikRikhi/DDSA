@@ -271,9 +271,6 @@ function createMemberCard(member) {
            class="member-card-image" 
            loading="lazy"
            onerror="this.onerror=null; this.src='${fallback}';">
-      <div class="member-card-overlay">
-        <span class="member-card-view">VIEW PROFILE →</span>
-      </div>
       <span class="member-card-category">${categoryLabel}</span>
     </div>
     <div class="member-card-info">
@@ -368,12 +365,12 @@ function openProfile(member) {
     currentMemberIndex = foundIdx;
   }
   
-  const fallback = member.fallbackImage || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face';
+  const fallback = member.image || member.fallbackImage || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1000&fit=crop&crop=face';
   
   // Hero Image
   const heroImg = document.getElementById('profileHeroImage');
   if (heroImg) {
-    heroImg.src = member.bannerImage || member.image;
+    heroImg.src = member.image || member.bannerImage || fallback;
     heroImg.alt = member.name;
     heroImg.onerror = function() {
       this.onerror = null;
@@ -384,7 +381,7 @@ function openProfile(member) {
   // Dynamic Overlay Background
   const overlay = document.querySelector('.profile-hero-overlay');
   if (overlay) {
-    const overlayImage = member.overlayImage || member.bannerImage || member.image;
+    const overlayImage = member.overlayImage || member.image || member.bannerImage || fallback;
     overlay.style.background = `linear-gradient(to top, var(--black) 10%, rgba(10,10,10,0.4) 60%, transparent 100%), url('${overlayImage}') center/cover no-repeat`;
   }
   

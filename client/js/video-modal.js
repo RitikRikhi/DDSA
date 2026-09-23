@@ -32,6 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
             video.muted = true; 
             video.playsInline = true; 
             video.controls = true;
+            video.setAttribute('controlsList', 'nodownload noplaybackrate');
+            video.setAttribute('disablePictureInPicture', 'true');
+            video.setAttribute('disableRemotePlayback', 'true');
+            video.setAttribute('oncontextmenu', 'return false;');
+            video.disablePictureInPicture = true;
             video.style.width = '100%';
             video.style.height = '100%';
             video.style.display = 'block';
@@ -60,6 +65,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             container.appendChild(video);
+
+            // Add embedded watermark
+            const watermark = document.createElement('div');
+            watermark.className = 'dsa-embedded-watermark';
+            watermark.textContent = 'DSA MEDIA CREW · OFFICIAL 4K';
+            container.appendChild(watermark);
             
             // Show message if video is large/loading
             const loadingMsg = document.createElement('div');

@@ -1,4 +1,4 @@
-﻿/* ============================================
+/* ============================================
    DSA MEDIA CREW UNIFIED NAVBAR
    ============================================ */
 
@@ -412,3 +412,111 @@ nav.scrolled,
     font-size: 0.9rem !important;
   }
 }
+
+/* ==========================================================================
+   GLOBAL CONTENT & MEDIA PROTECTION LAYER (ANTI-DOWNLOAD & EMBEDDING SHIELD)
+   ========================================================================== */
+
+img, video, canvas, picture {
+  -webkit-user-drag: none !important;
+  -khtml-user-drag: none !important;
+  -moz-user-drag: none !important;
+  -o-user-drag: none !important;
+  user-drag: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  -webkit-touch-callout: none !important; /* Disables iOS long-press save sheet */
+}
+
+/* Embedded Media Protection Shield */
+.media-protection-shield {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: transparent;
+  pointer-events: auto;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Watermark Overlay for embedded media branding */
+.dsa-embedded-watermark {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  z-index: 5;
+  pointer-events: none;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Toast alert when download / right-click is attempted */
+#dsa-protection-toast {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: rgba(14, 14, 14, 0.95);
+  border: 1px solid rgba(184, 160, 106, 0.6);
+  color: #f5f0eb;
+  padding: 0.9rem 1.8rem;
+  border-radius: 10px;
+  font-family: 'Space Grotesk', 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.85), 0 0 25px rgba(184, 160, 106, 0.2);
+  z-index: 99999999;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+#dsa-protection-toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+#dsa-protection-toast .toast-icon {
+  font-size: 1.25rem;
+}
+
+#dsa-protection-toast .toast-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+#dsa-protection-toast .toast-text strong {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  color: var(--nav-gold, #b8a06a);
+  text-transform: uppercase;
+}
+
+#dsa-protection-toast .toast-text span {
+  font-size: 0.8rem;
+  color: rgba(245, 240, 235, 0.85);
+  letter-spacing: 0.02em;
+}
+

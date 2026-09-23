@@ -54,5 +54,12 @@
     "purpose": "Book us for an event",
     "message": "demo",
     "createdAt": "2026-09-12T10:24:45.652Z"
+  },
+  {
+    "name": "Ritik Rikhi",
+    "email": "rikhiritik8@gmail.com",
+    "purpose": "Book us for an event",
+    "message": "demoo",
+    "createdAt": "2026-09-17T04:59:10.230Z"
   }
 ]

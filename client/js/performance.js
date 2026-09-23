@@ -1,4 +1,4 @@
-﻿/**
+/**
  * DSA Media Crew - Fast Media & Performance Engine
  * Ensures instantaneous image/video loading, auto-lazy loading, memory optimization, and video streaming.
  */
@@ -23,6 +23,9 @@
       if (!img.hasAttribute('decoding')) {
         img.setAttribute('decoding', 'async');
       }
+      // Anti-download security attributes
+      img.setAttribute('draggable', 'false');
+      img.setAttribute('oncontextmenu', 'return false;');
 
       // Auto-optimize Cloudinary images for modern formats (WebP/AVIF)
       const src = img.getAttribute('src');
@@ -41,6 +44,15 @@
   function initVideoPerformance() {
     const videos = document.querySelectorAll('video');
     if (videos.length === 0) return;
+
+    videos.forEach(video => {
+      video.setAttribute('controlsList', 'nodownload noplaybackrate');
+      video.setAttribute('disablePictureInPicture', 'true');
+      video.setAttribute('disableRemotePlayback', 'true');
+      video.setAttribute('oncontextmenu', 'return false;');
+      video.disablePictureInPicture = true;
+      video.disableRemotePlayback = true;
+    });
 
     // IntersectionObserver to pause videos when scrolled out of view (saves massive CPU/bandwidth)
     if ('IntersectionObserver' in window) {

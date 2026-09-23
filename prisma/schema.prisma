@@ -1,0 +1,213 @@
+// Prisma Schema for DSA Media Crew Production Backend
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  key         String   @unique // SUPER_ADMIN, ADMIN, TECHNICAL_HEAD, PHOTOGRAPHER, VIDEOGRAPHER, EDITOR, DESIGNER, SOCIAL_MEDIA_MANAGER, VOLUNTEER
+  permissions String   @default("[]") // JSON string of permission keys
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  users       User[]
+}
+
+model User {
+  id                   String            @id @default(cuid())
+  name                 String
+  email                String            @unique
+  password             String?
+  phone                String?
+  avatar               String?
+  bannerImage          String?
+  year                 String?           @default("3rd Year")
+  skills               String            @default("[]") // JSON array of skill strings
+  attendancePercentage Float             @default(95.0)
+  departmentId         String?
+  department           Department?       @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  roleId               String?
+  role                 Role?             @relation(fields: [roleId], references: [id], onDelete: SetNull)
+  roleName             String?           // Denormalized for rapid read access
+  category             String?           // Photography, Videography, Editing, Design, etc.
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  assignments          EventAssignment[]
+  attendanceRecords    Attendance[]
+  borrowRecords        BorrowRecord[]
+  mediaAssets          MediaAsset[]
+  notifications        Notification[]
+  activityLogs         ActivityLog[]
+
+  @@index([departmentId])
+  @@index([roleId])
+  @@index([email])
+}
+
+model Event {
+  id                String            @id @default(cuid())
+  title             String
+  name              String?           // Alias for backward compatibility
+  banner            String?
+  coverImage        String?
+  venue             String
+  description       String?
+  startDate         DateTime?
+  endDate           DateTime?
+  date              String?           // Human-readable / formatted date string
+  time              String?
+  status            String            @default("planning") // planning, live, completed
+  priority          String            @default("medium")   // low, medium, high, urgent
+  createdById       String?
+  tasksCount        Int               @default(10)
+  completedTasks    Int               @default(0)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  assignments       EventAssignment[]
+  mediaAssets       MediaAsset[]
+  attendanceRecords Attendance[]
+
+  @@index([status])
+  @@index([priority])
+}
+
+model EventAssignment {
+  id             String   @id @default(cuid())
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  eventId        String
+  event          Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  responsibility String   @default("Crew Lead")
+  assignedAt     DateTime @default(now())
+
+  @@unique([userId, eventId])
+  @@index([userId])
+  @@index([eventId])
+}
+
+model Attendance {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  creator    String?  // Name of the creator for fast lookups
+  eventId    String?
+  event      Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  date       String
+  checkIn    String
+  checkOut   String?
+  totalHours Float    @default(0)
+  status     String   @default("On Duty") // On Duty, Present, Late, Excused
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([eventId])
+  @@index([date])
+}
+
+model Equipment {
+  id            String         @id @default(cuid())
+  name          String
+  category      String         // Camera, Lens, Gimbal, Audio, Lighting, Drone, Accessories
+  serialNumber  String         @unique
+  serialNo      String?        // Alias for compatibility
+  qrCode        String?
+  condition     String         @default("Excellent") // Excellent, Good, Fair, Needs Maintenance
+  availability  String         @default("Available") // Available, In Use, Maintenance
+  status        String         @default("Available") // Available, In Use, Maintenance
+  image         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  borrowRecords BorrowRecord[]
+
+  @@index([category])
+  @@index([availability])
+  @@index([status])
+}
+
+model BorrowRecord {
+  id               String    @id @default(cuid())
+  equipmentId      String
+  equipment        Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  userId           String?
+  user             User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  borrower         String    // Name of the borrower
+  issueDate        DateTime  @default(now())
+  returnDate       DateTime?
+  expectedReturn   String?
+  actualReturnDate DateTime?
+  status           String    @default("Active") // Active, Returned, Overdue
+  createdAt        DateTime  @default(now())
+
+  @@index([equipmentId])
+  @@index([userId])
+  @@index([status])
+}
+
+model MediaAsset {
+  id           String   @id @default(cuid())
+  fileName     String
+  fileUrl      String
+  thumbnailUrl String?
+  type         String   @default("image") // image, video
+  size         String?
+  sizeBytes    Int?
+  res          String?
+  category     String   @default("photography") // photography, videography, editing, achievements, reels, team-bts, archives, sports
+  tags         String   @default("[]") // JSON string of string tags
+  exif         String?
+  isFeatured   Boolean  @default(false)
+  eventId      String?
+  event        Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  uploadedById String?
+  uploadedBy   User?    @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime @default(now())
+
+  @@index([category])
+  @@index([type])
+  @@index([eventId])
+  @@index([uploadedById])
+}
+
+model Notification {
+  id         String   @id @default(cuid())
+  title      String
+  message    String
+  type       String   @default("info") // info, alert, success, event, equipment, media, attendance
+  readStatus Boolean  @default(false)
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([readStatus])
+}
+
+model ActivityLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userName   String?
+  action     String
+  entityType String?
+  entityId   String?
+  details    String?
+  timestamp  DateTime @default(now())
+
+  @@index([userId])
+  @@index([timestamp])
+}

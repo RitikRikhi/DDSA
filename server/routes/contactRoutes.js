@@ -7,6 +7,7 @@ const Inquiry = require("../models/inquiry");
 const nodemailer = require("nodemailer");
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
+const { supabase } = require("../config/supabase");
 
 // Local backup storage file
 const dataDir = path.resolve(__dirname, "../data");
@@ -68,7 +69,33 @@ router.post("/", catchAsync(async (req, res, next) => {
       createdAt: new Date()
     };
 
-    // 1. Try saving to MongoDB if connected
+    // 1. Save to Supabase (PostgreSQL)
+    try {
+      if (supabase) {
+        const { data: sbData, error: sbErr } = await supabase
+          .from('inquiries')
+          .insert([
+            {
+              name: inquiryData.name,
+              email: inquiryData.email,
+              purpose: inquiryData.purpose,
+              message: inquiryData.message,
+              created_at: new Date().toISOString()
+            }
+          ])
+          .select();
+        
+        if (sbErr) {
+          console.warn("Supabase insert note:", sbErr.message);
+        } else {
+          console.log("Inquiry successfully saved to Supabase!");
+        }
+      }
+    } catch (sbException) {
+      console.warn("Supabase query error:", sbException.message);
+    }
+
+    // 2. Try saving to MongoDB if connected
     let savedInquiry = inquiryData;
     try {
       if (mongoose.connection.readyState === 1) {
@@ -80,7 +107,7 @@ router.post("/", catchAsync(async (req, res, next) => {
       console.warn("MongoDB save skipped/failed:", dbErr.message);
     }
 
-    // 2. Always backup to local inquiries.json
+    // 3. Always backup to local inquiries.json
     saveLocalInquiry(inquiryData);
 
     // 3. Send email notification via SMTP
