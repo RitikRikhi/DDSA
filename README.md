@@ -163,3 +163,4 @@ The application will be live at `http://localhost:5000`.
 * **Admin Login**: `http://localhost:5000/admin/login` (Default credentials: `admin@dsa.com` / `admin123`)
 * **Public Gallery**: `http://localhost:5000/gallery`
 * **Public Team Roster**: `http://localhost:5000/team`
+
