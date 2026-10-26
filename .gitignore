@@ -46,6 +46,9 @@ remove_editing_videos.js
 remove_specific_videos.js
 scripts/
 
+# Generated thumbnails and video posters
+server/uploads/thumbs/
+
 # Large media files (exceeding GitHub/Vercel limits)
 poetry.mp4
 100.6604.MOV

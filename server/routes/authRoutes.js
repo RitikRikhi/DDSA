@@ -4,13 +4,28 @@ const bcrypt = require('bcryptjs');
 const prisma = require('../config/prisma');
 const { signToken, authenticate } = require('../middleware/authMiddleware');
 const { validate, loginSchema, registerSchema } = require('../middleware/validation');
+const rateLimit = require('express-rate-limit');
 const { logActivity } = require('../utils/activityLogger');
+
+// 10 login attempts per IP per 15 minutes
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  skip: () => process.env.NODE_ENV === 'test',
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: {
+    success: false,
+    error: 'Too Many Requests',
+    message: 'Too many login attempts. Please try again in 15 minutes.'
+  }
+});
 
 /**
  * POST /api/auth/login
  * Public endpoint to authenticate user and return JWT session
  */
-router.post('/login', validate(loginSchema), async (req, res) => {
+router.post('/login', loginLimiter, validate(loginSchema), async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -67,10 +82,10 @@ router.post('/login', validate(loginSchema), async (req, res) => {
       });
     }
 
-    // Compare password
-    const isPasswordValid = user.password 
+    // Compare password (accounts without a password cannot log in)
+    const isPasswordValid = user.password
       ? await bcrypt.compare(password, user.password)
-      : password === 'admin123'; // fallback for seeded users
+      : false;
 
     if (!isPasswordValid) {
       return res.status(401).json({

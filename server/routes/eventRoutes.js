@@ -1,10 +1,33 @@
 const express = require('express');
 const router = express.Router();
 const prisma = require('../config/prisma');
-const { authenticate, requireRoles } = require('../middleware/authMiddleware');
+const { authenticate, optionalAuth, requireRoles, normalizeRole } = require('../middleware/authMiddleware');
 const { validate, eventCreateSchema, eventUpdateSchema, eventAssignSchema } = require('../middleware/validation');
 const { logActivity } = require('../utils/activityLogger');
 const { createNotification } = require('../utils/notificationHelper');
+const { formatMedia } = require('./mediaRoutes');
+
+const slugify = (text) => String(text || '')
+  .toLowerCase()
+  .normalize('NFKD')
+  .replace(/[̀-ͯ]/g, '')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '')
+  .slice(0, 80) || 'event';
+
+// Find a slug not used by another event (appends -2, -3, ...)
+async function uniqueEventSlug(base, excludeId = null) {
+  let candidate = base;
+  for (let i = 2; ; i++) {
+    const clash = await prisma.event.findFirst({
+      where: { slug: candidate, ...(excludeId ? { NOT: { id: excludeId } } : {}) }
+    });
+    if (!clash) return candidate;
+    candidate = `${base}-${i}`;
+  }
+}
+
+const isAdminUser = (user) => user && ['ADMIN', 'SUPER_ADMIN'].includes(normalizeRole(user.role));
 
 /**
  * Format event for consistent API response
@@ -13,6 +36,12 @@ function formatEvent(e) {
   const assignedTeam = (e.assignments || []).map(a => a.user?.name || a.userId).filter(Boolean);
   return {
     id: e.id,
+    slug: e.slug || null,
+    summary: e.summary || null,
+    isPublished: Boolean(e.isPublished),
+    heroVideoId: e.heroVideoId || null,
+    sortOrder: e.sortOrder || 0,
+    mediaCount: e._count?.mediaAssets,
     title: e.title || e.name,
     name: e.name || e.title, // alias for backwards compatibility
     banner: e.banner || e.coverImage || 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800',
@@ -40,9 +69,12 @@ function formatEvent(e) {
  */
 router.get('/', async (req, res) => {
   try {
-    const { status, search, priority, page = 1, limit = 100 } = req.query;
+    const { status, search, priority, published, page = 1, limit = 100 } = req.query;
 
     const where = {};
+    if (published === 'true') {
+      where.isPublished = true;
+    }
     if (status && status !== 'all') {
       where.status = status;
     }
@@ -67,11 +99,14 @@ router.get('/', async (req, res) => {
         include: {
           assignments: {
             include: { user: true }
-          }
+          },
+          _count: { select: { mediaAssets: true } }
         },
         skip,
         take,
-        orderBy: { createdAt: 'desc' }
+        orderBy: published === 'true'
+          ? [{ sortOrder: 'asc' }, { startDate: 'desc' }]
+          : { createdAt: 'desc' }
       }),
       prisma.event.count({ where })
     ]);
@@ -96,29 +131,32 @@ router.get('/', async (req, res) => {
 });
 
 /**
- * GET /api/events/:id
- * Retrieve event details by ID
+ * GET /api/events/:idOrSlug
+ * Retrieve event details by ID or slug. Draft media is only returned to admins.
+ * Public pages pass ?published=true so unpublished events 404 for non-admins.
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', optionalAuth, async (req, res) => {
   try {
-    const event = await prisma.event.findUnique({
-      where: { id: req.params.id },
+    const admin = isAdminUser(req.user);
+    const event = await prisma.event.findFirst({
+      where: { OR: [{ id: req.params.id }, { slug: req.params.id }] },
       include: {
         assignments: {
           include: { user: true }
         },
         mediaAssets: {
-          take: 20,
-          orderBy: { createdAt: 'desc' }
+          where: admin ? {} : { isPublished: true },
+          orderBy: [{ sortOrder: 'asc' }, { createdAt: 'desc' }],
+          include: { event: true, uploadedBy: true, credits: { include: { user: { select: { id: true, name: true } } } } }
         },
-        attendanceRecords: {
+        attendanceRecords: admin ? {
           take: 20,
           orderBy: { createdAt: 'desc' }
-        }
+        } : false
       }
     });
 
-    if (!event) {
+    if (!event || (!event.isPublished && !admin && req.query.published === 'true')) {
       return res.status(404).json({
         success: false,
         error: 'Not Found',
@@ -127,8 +165,11 @@ router.get('/:id', async (req, res) => {
     }
 
     const formatted = formatEvent(event);
-    formatted.media = event.mediaAssets;
-    formatted.attendance = event.attendanceRecords;
+    formatted.media = event.mediaAssets.map(formatMedia);
+    formatted.photos = formatted.media.filter(m => m.type === 'image' && m.category !== 'site');
+    formatted.videos = formatted.media.filter(m => m.type === 'video');
+    formatted.heroVideo = formatted.media.find(m => m.id === event.heroVideoId) || null;
+    formatted.attendance = event.attendanceRecords || [];
 
     return res.status(200).json({
       success: true,
@@ -164,7 +205,12 @@ router.post('/', authenticate, requireRoles('SUPER_ADMIN', 'ADMIN', 'TECHNICAL_H
       priority = 'medium',
       tasksCount = 10,
       completedTasks = 0,
-      assignedTeam = []
+      assignedTeam = [],
+      slug,
+      summary,
+      isPublished = false,
+      heroVideoId,
+      sortOrder = 0
     } = req.body;
 
     const eventTitle = title || name;
@@ -174,6 +220,11 @@ router.post('/', authenticate, requireRoles('SUPER_ADMIN', 'ADMIN', 'TECHNICAL_H
       data: {
         title: eventTitle,
         name: eventTitle,
+        slug: await uniqueEventSlug(slug || slugify(eventTitle)),
+        summary: summary || null,
+        isPublished,
+        heroVideoId: heroVideoId || null,
+        sortOrder,
         banner: bannerUrl,
         coverImage: bannerUrl,
         venue,
@@ -275,7 +326,12 @@ router.patch('/:id', authenticate, requireRoles('SUPER_ADMIN', 'ADMIN', 'TECHNIC
       priority,
       tasksCount,
       completedTasks,
-      assignedTeam
+      assignedTeam,
+      slug,
+      summary,
+      isPublished,
+      heroVideoId,
+      sortOrder
     } = req.body;
 
     const existing = await prisma.event.findUnique({ where: { id } });
@@ -306,6 +362,15 @@ router.patch('/:id', authenticate, requireRoles('SUPER_ADMIN', 'ADMIN', 'TECHNIC
     if (priority !== undefined) updateData.priority = priority;
     if (tasksCount !== undefined) updateData.tasksCount = tasksCount;
     if (completedTasks !== undefined) updateData.completedTasks = completedTasks;
+    if (summary !== undefined) updateData.summary = summary;
+    if (isPublished !== undefined) updateData.isPublished = isPublished;
+    if (heroVideoId !== undefined) updateData.heroVideoId = heroVideoId;
+    if (sortOrder !== undefined) updateData.sortOrder = sortOrder;
+    if (slug !== undefined) {
+      updateData.slug = await uniqueEventSlug(slug, id);
+    } else if (!existing.slug) {
+      updateData.slug = await uniqueEventSlug(slugify(updateData.title || existing.title), id);
+    }
 
     // Update event
     const updated = await prisma.event.update({

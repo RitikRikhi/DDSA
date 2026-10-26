@@ -6,12 +6,13 @@ const helmet = require("helmet");
 const compression = require("compression");
 const path = require("path");
 const fs = require("fs");
-const bcrypt = require("bcryptjs");
-const Admin = require("./models/Admin");
 const { streamMediaFile, findMediaFile } = require("./utils/mediaStreamer");
 const prisma = require("./config/prisma");
 
 const app = express();
+
+// Render sits behind one proxy; needed for correct client IPs in rate limiting
+app.set("trust proxy", 1);
 
 // 1. Gzip/Deflate compression for all responses (HTML, CSS, JS, JSON)
 app.use(compression());
@@ -88,8 +89,8 @@ app.get(["/designs", "/editing-designs", "/editing-designs.html"], serveHTML(pat
 app.get(["/meraki26", "/meraki26.html"], serveHTML(path.join(clientPath, "meraki26.html")));
 
 // Admin Routes
-app.get(["/admin", "/admin/dashboard", "/admin/dashboard.html", "/admin/portal", "/admin/portal.html"], serveHTML(path.join(adminPath, "portal.html")));
-app.get(["/admin/login", "/admin/login.html"], serveHTML(path.join(adminPath, "login.html")));
+app.get(["/admin", "/admin/", "/admin/cms", "/admin/cms.html", "/admin/login", "/admin/login.html"], serveHTML(path.join(adminPath, "cms.html")));
+app.get(["/admin/dashboard", "/admin/dashboard.html", "/admin/portal", "/admin/portal.html"], serveHTML(path.join(adminPath, "portal.html")));
 app.get(["/upload", "/admin/upload", "/admin/professional-admin.html"], serveHTML(path.join(adminPath, "professional-admin.html")));
 app.get(["/admin/artwork-upload", "/admin/artwork-upload.html"], serveHTML(path.join(adminPath, "artwork-upload.html")));
 app.get(["/admin/team-portal", "/admin/team-portal.html", "/admin/team"], serveHTML(path.join(adminPath, "team-portal.html")));
@@ -210,24 +211,6 @@ app.use((req, res) => {
 const globalErrorHandler = require("./middleware/errorMiddleware");
 app.use(globalErrorHandler);
 
-// Create default admin account
-const createDefaultAdmin = async () => {
-  try {
-    const existingAdmin = await Admin.findOne({ email: "admin@dsa.com" });
-    if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash("admin123", 10);
-      const admin = new Admin({
-        email: "admin@dsa.com",
-        password: hashedPassword
-      });
-      await admin.save();
-      console.log("Default admin account created!");
-    }
-  } catch (err) {
-    // Non-fatal if Mongo not used
-  }
-};
-
 // Resilient MongoDB connection (if configured and not in test mode)
 if (process.env.MONGO_URI && process.env.NODE_ENV !== 'test') {
   mongoose.connection.on('error', err => {
@@ -237,9 +220,8 @@ if (process.env.MONGO_URI && process.env.NODE_ENV !== 'test') {
   mongoose.connect(process.env.MONGO_URI, {
     serverSelectionTimeoutMS: 3000,
   })
-  .then(async () => {
+  .then(() => {
     console.log("MongoDB Connected successfully");
-    await createDefaultAdmin();
   })
   .catch(err => {
     console.log("MongoDB Connection Notice (running with Prisma SQLite engine):", err.message);

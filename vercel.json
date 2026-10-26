@@ -3,7 +3,7 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "https://dsa-media-api.onrender.com/api/$1" },
     { "source": "/admin/(.*)", "destination": "/admin/$1" },
-    { "source": "/admin", "destination": "/admin/login.html" },
+    { "source": "/admin", "destination": "/admin/cms.html" },
     { "source": "/(.*)", "destination": "/client/$1" }
   ]
 }

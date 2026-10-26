@@ -45,18 +45,32 @@ model User {
   role                 Role?             @relation(fields: [roleId], references: [id], onDelete: SetNull)
   roleName             String?           // Denormalized for rapid read access
   category             String?           // Photography, Videography, Editing, Design, etc.
+  // Public portfolio profile
+  slug                 String?           @unique
+  displayRole          String?           // Public title, e.g. "Vice President" (separate from RBAC role)
+  bio                  String?
+  tagline              String?
+  specialty            String?
+  teamCategory         String?           // leader, photography, videography, design, editing, content, tech, vlogging, onscreen
+  socials              String            @default("{}") // JSON object: { instagram, linkedin, ... }
+  mediaDNA             String            @default("{}") // JSON object: { storytelling: 20, ... }
+  credits              String            @default("[]") // JSON array of project names
+  isPublic             Boolean           @default(false)
+  displayOrder         Int               @default(0)
   createdAt            DateTime          @default(now())
   updatedAt            DateTime          @updatedAt
   assignments          EventAssignment[]
   attendanceRecords    Attendance[]
   borrowRecords        BorrowRecord[]
   mediaAssets          MediaAsset[]
+  mediaCredits         MediaCredit[]
   notifications        Notification[]
   activityLogs         ActivityLog[]
 
   @@index([departmentId])
   @@index([roleId])
   @@index([email])
+  @@index([isPublic])
 }
 
 model Event {
@@ -74,6 +88,11 @@ model Event {
   status            String            @default("planning") // planning, live, completed
   priority          String            @default("medium")   // low, medium, high, urgent
   createdById       String?
+  slug              String?           @unique
+  summary           String?
+  isPublished       Boolean           @default(false)
+  heroVideoId       String?           // MediaAsset id of the featured video
+  sortOrder         Int               @default(0)
   tasksCount        Int               @default(10)
   completedTasks    Int               @default(0)
   createdAt         DateTime          @default(now())
@@ -84,6 +103,7 @@ model Event {
 
   @@index([status])
   @@index([priority])
+  @@index([isPublished])
 }
 
 model EventAssignment {
@@ -159,28 +179,55 @@ model BorrowRecord {
 }
 
 model MediaAsset {
-  id           String   @id @default(cuid())
-  fileName     String
-  fileUrl      String
-  thumbnailUrl String?
-  type         String   @default("image") // image, video
-  size         String?
-  sizeBytes    Int?
-  res          String?
-  category     String   @default("photography") // photography, videography, editing, achievements, reels, team-bts, archives, sports
-  tags         String   @default("[]") // JSON string of string tags
-  exif         String?
-  isFeatured   Boolean  @default(false)
-  eventId      String?
-  event        Event?   @relation(fields: [eventId], references: [id], onDelete: SetNull)
-  uploadedById String?
-  uploadedBy   User?    @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
-  createdAt    DateTime @default(now())
+  id            String        @id @default(cuid())
+  fileName      String
+  fileUrl       String
+  thumbnailUrl  String?
+  posterUrl     String?       // Video poster frame
+  type          String        @default("image") // image, video
+  size          String?
+  sizeBytes     Int?
+  res           String?
+  width         Int?
+  height        Int?
+  durationSec   Float?
+  title         String?
+  description   String?
+  category      String        @default("photography") // photography, videography, editing, achievements, reels, team-bts, archives, sports, site (internal: covers, posters, avatars)
+  subcategory   String?       // videography: aftermovie, reel, highlight, ...
+  tags          String        @default("[]") // JSON string of string tags
+  exif          String?
+  isFeatured    Boolean       @default(false)
+  isPublished   Boolean       @default(true)
+  sortOrder     Int           @default(0)
+  storage       String        @default("local") // local, cloudinary
+  cloudPublicId String?
+  eventId       String?
+  event         Event?        @relation(fields: [eventId], references: [id], onDelete: SetNull)
+  uploadedById  String?
+  uploadedBy    User?         @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  credits       MediaCredit[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @default(now()) @updatedAt
 
   @@index([category])
   @@index([type])
   @@index([eventId])
   @@index([uploadedById])
+  @@index([isPublished])
+}
+
+// Crew member credited on a media asset (drives team portfolios)
+model MediaCredit {
+  id      String     @id @default(cuid())
+  mediaId String
+  media   MediaAsset @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role    String?    // e.g. Lead Photographer, Editor
+
+  @@unique([mediaId, userId])
+  @@index([userId])
 }
 
 model Notification {

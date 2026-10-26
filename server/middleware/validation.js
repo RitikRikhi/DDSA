@@ -47,6 +47,15 @@ const userUpdateSchema = z.object({
 });
 
 // Event Schemas
+// Fields used by the public events pages
+const eventPublicFields = {
+  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug may only contain lowercase letters, numbers and dashes').max(80).optional(),
+  summary: z.string().max(300).nullable().optional(),
+  isPublished: z.boolean().optional(),
+  heroVideoId: z.string().nullable().optional(),
+  sortOrder: z.number().int().optional()
+};
+
 const eventCreateSchema = z.object({
   title: z.string().min(2, 'Title must be at least 2 characters').optional(),
   name: z.string().min(2, 'Name must be at least 2 characters').optional(),
@@ -62,7 +71,8 @@ const eventCreateSchema = z.object({
   priority: z.enum(['low', 'medium', 'high', 'urgent']).optional().default('medium'),
   tasksCount: z.number().int().min(0).optional(),
   completedTasks: z.number().int().min(0).optional(),
-  assignedTeam: z.array(z.string()).optional()
+  assignedTeam: z.array(z.string()).optional(),
+  ...eventPublicFields
 }).refine(data => data.title || data.name, {
   message: 'Event title or name is required'
 });
@@ -82,7 +92,8 @@ const eventUpdateSchema = z.object({
   priority: z.enum(['low', 'medium', 'high', 'urgent']).optional(),
   tasksCount: z.number().int().min(0).optional(),
   completedTasks: z.number().int().min(0).optional(),
-  assignedTeam: z.array(z.string()).optional()
+  assignedTeam: z.array(z.string()).optional(),
+  ...eventPublicFields
 });
 
 const eventAssignSchema = z.object({

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>DSA Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/css/cms.css?v=1">
+</head>
+<body>
+  <!-- Login -->
+  <main id="loginView" class="login-view" hidden>
+    <form id="loginForm" class="login-card" novalidate>
+      <div class="brand brand-lg">DSA <span>MEDIA CREW</span></div>
+      <p class="login-sub">Admin panel</p>
+      <label class="field">
+        <span>Email</span>
+        <input type="email" name="email" autocomplete="username" required>
+      </label>
+      <label class="field">
+        <span>Password</span>
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+      <p id="loginError" class="form-error" role="alert"></p>
+      <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+    </form>
+  </main>
+
+  <!-- App shell -->
+  <div id="appView" class="app" hidden>
+    <aside class="sidebar">
+      <div class="brand">DSA <span>ADMIN</span></div>
+      <nav class="nav" aria-label="Sections">
+        <a href="#/gallery" data-section="gallery">Gallery</a>
+        <a href="#/events" data-section="events">Events</a>
+        <a href="#/videography" data-section="videography">Videography</a>
+        <a href="#/team" data-section="team">Team Portfolio</a>
+        <a href="#/library" data-section="library">Media Library</a>
+      </nav>
+      <div class="sidebar-foot">
+        <div id="whoami" class="whoami"></div>
+        <a class="btn btn-ghost btn-sm" href="/" target="_blank" rel="noopener">View site</a>
+        <button id="logoutBtn" class="btn btn-ghost btn-sm" type="button">Sign out</button>
+      </div>
+    </aside>
+    <main id="view" class="view" tabindex="-1"></main>
+  </div>
+
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <script type="module" src="/admin/js/cms/app.js?v=1"></script>
+</body>
+</html>
